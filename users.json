@@ -1,0 +1,98 @@
+{
+  "users": [
+    {
+      "id": "1d2c5e42-f091-45f5-b1a4-fccee50aff9a",
+      "name": "Sumit Vinod Narule",
+      "email": "sumitnarule1275@gmail.com",
+      "password_hash": "scrypt:32768:8:1$iZo3Uz5jTFGU4UWB$3dc08f1d2d71d6fad2aa051c9bbdbdeed7a13a41ad97a7f79635287b678aaa744970c73802d5cb258a3762bfd2d6b5f929e2c6979c74f95a562f00d9bcc39455",
+      "created_at": "2026-04-21T16:19:52.317979+00:00",
+      "last_login_at": "2026-04-21T16:27:54.756230+00:00",
+      "login_history": [
+        {
+          "timestamp": "2026-04-21T16:19:52.318052+00:00",
+          "ip_address": "127.0.0.1",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+        },
+        {
+          "timestamp": "2026-04-21T16:27:54.756230+00:00",
+          "ip_address": "127.0.0.1",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+        }
+      ],
+      "activities": [
+        {
+          "timestamp": "2026-04-21T16:19:52.318111+00:00",
+          "action": "sign_up",
+          "details": {
+            "email": "sumitnarule1275@gmail.com"
+          }
+        },
+        {
+          "timestamp": "2026-04-21T16:19:52.318117+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-21T16:21:08.040432+00:00",
+          "action": "scheme_search",
+          "details": {
+            "age": "18_25",
+            "income": "1_to_2_5_lakhs",
+            "occupation": "student",
+            "matched_schemes": 4
+          }
+        },
+        {
+          "timestamp": "2026-04-21T16:27:42.626838+00:00",
+          "action": "sign_out",
+          "details": {}
+        },
+        {
+          "timestamp": "2026-04-21T16:27:54.756330+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-21T16:40:34.552277+00:00",
+          "action": "sign_out",
+          "details": {}
+        }
+      ]
+    },
+    {
+      "id": "e3ab298d-44c4-4d56-81fc-57b845b2c655",
+      "name": "anuj",
+      "email": "sumitnarule1475@gmail.com",
+      "password_hash": "scrypt:32768:8:1$EApUmazv0efKNJGZ$89353d3631fe8480249ede59196a6c9e0a72b51a02fa843443973ee480fdd2c861fdb062087db54463cd68d8a2c07768c40158574de212e4de60bd9772a81b2e",
+      "created_at": "2026-04-21T16:41:34.627656+00:00",
+      "last_login_at": "2026-04-21T16:41:34.627700+00:00",
+      "login_history": [
+        {
+          "timestamp": "2026-04-21T16:41:34.627700+00:00",
+          "ip_address": "127.0.0.1",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+        }
+      ],
+      "activities": [
+        {
+          "timestamp": "2026-04-21T16:41:34.627804+00:00",
+          "action": "sign_up",
+          "details": {
+            "email": "sumitnarule1475@gmail.com"
+          }
+        },
+        {
+          "timestamp": "2026-04-21T16:41:34.627827+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        }
+      ]
+    }
+  ]
+}
