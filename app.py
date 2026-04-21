@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, render_template
 import json
 import logging
 import os
+import re
 import urllib.error
 import urllib.request
 from env_loader import get_env, load_env_file
@@ -48,6 +49,25 @@ AGE_GROUP_TO_RANGE = {
     "Above 60": (61, 200),
 }
 
+ASSISTANT_CATEGORY_HINTS = {
+    "Education": ["scholarship", "student", "college", "school", "tuition", "fees", "exam"],
+    "Agriculture": ["farmer", "crop", "kisan", "agriculture", "farming", "soil"],
+    "Health": ["health", "hospital", "medical", "treatment", "insurance"],
+    "Housing": ["housing", "house", "home", "awas"],
+    "Employment": ["job", "employment", "business", "loan", "enterprise", "vendor"],
+    "Skill Development": ["skill", "training", "certificate", "apprenticeship"],
+    "Women & Child": ["girl", "women", "woman", "pregnant", "maternity", "child"],
+    "Senior Citizen": ["senior", "old age", "elderly", "pension", "retired"],
+    "Social Security": ["pension", "social security", "retirement"],
+}
+
+ASSISTANT_INCOME_PHRASES = {
+    "low income": 250000,
+    "bpl": 250000,
+    "middle income": 800000,
+    "high income": 1000000000000,
+}
+
 INCOME_RANGE_TO_MAX = {
     "below_1_lakh": 100000,
     "1_to_2_5_lakhs": 250000,
@@ -77,6 +97,7 @@ OCCUPATION_NORMALIZATION = {
     "salaried employee": "salaried_employee",
     "daily wage worker": "daily_wage_worker",
     "senior citizen": "senior_citizen",
+    "pension": "senior_citizen",
     "farmer": "farmer",
 }
 
@@ -88,15 +109,28 @@ REQUIRED_FIELDS = {
 
 ASSISTANT_OCCUPATION_HINTS = {
     "student": "student",
+    "college": "student",
+    "school": "student",
     "farmer": "farmer",
     "agricultural": "farmer",
+    "shetkari": "farmer",
     "daily wage": "daily_wage_worker",
     "worker": "daily_wage_worker",
+    "labour": "daily_wage_worker",
+    "labor": "daily_wage_worker",
     "self employed": "self_employed",
     "self-employed": "self_employed",
+    "business": "self_employed",
+    "entrepreneur": "self_employed",
+    "vendor": "self_employed",
     "salaried": "salaried_employee",
+    "employee": "salaried_employee",
     "job": "salaried_employee",
     "unemployed": "unemployed",
+    "jobless": "unemployed",
+    "housewife": "unemployed",
+    "homemaker": "unemployed",
+    "retired": "senior_citizen",
     "senior citizen": "senior_citizen",
 }
 
@@ -127,9 +161,10 @@ def get_gemini_reply(message):
         return None
 
     prompt = (
-        "You are KAU AI assistant helping users discover Indian government schemes. "
-        "Reply briefly with practical guidance. If details are missing, ask for age group, "
-        "occupation, and income range."
+        "You are KAU AI assistant helping users discover Indian and Maharashtra government schemes. "
+        "Give concise but practical responses with eligibility reasoning, suggest 2-4 relevant schemes, "
+        "and include official apply links when possible. If details are missing, ask for age, occupation, "
+        "and annual income. If user asks complex comparison, answer in clear points."
     )
     payload = {
         "contents": [
@@ -141,7 +176,7 @@ def get_gemini_reply(message):
                 ]
             }
         ],
-        "generationConfig": {"temperature": 0.3, "maxOutputTokens": 220},
+        "generationConfig": {"temperature": 0.25, "maxOutputTokens": 360},
     }
     request_url = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
@@ -199,42 +234,211 @@ def validate_form_data(form_data):
     return None
 
 
-def suggest_schemes_from_message(message, max_results=3):
+def amount_from_unit(raw_value, raw_unit):
+    cleaned_value = str(raw_value).replace(",", "").strip()
+    if not cleaned_value:
+        return None
+    try:
+        amount = float(cleaned_value)
+    except ValueError:
+        return None
+
+    unit = normalize_text(raw_unit)
+    if unit in {"lakh", "lac", "lakhs"}:
+        amount *= 100000
+    elif unit == "crore":
+        amount *= 10000000
+    elif unit in {"k", "thousand"}:
+        amount *= 1000
+    return int(amount)
+
+
+def format_rupees(amount):
+    return f"₹{int(amount):,}"
+
+
+def infer_category_from_message(message_text):
+    best_category = None
+    best_score = 0
+    for category, keywords in ASSISTANT_CATEGORY_HINTS.items():
+        score = sum(1 for keyword in keywords if keyword in message_text)
+        if score > best_score:
+            best_score = score
+            best_category = category
+    return best_category
+
+
+def extract_age_from_message(message_text):
+    patterns = [
+        r"\b(?:i am|i'm|age|aged)\s*(\d{1,3})\b",
+        r"\b(\d{1,3})\s*(?:years?|yrs?)\s*old\b",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, message_text)
+        if not match:
+            continue
+        age = int(match.group(1))
+        if 0 <= age <= 120:
+            return age
+
+    if any(keyword in message_text for keyword in ("senior citizen", "retired", "old age")):
+        return 60
+    if any(keyword in message_text for keyword in ("school student", "minor child", "under 18")):
+        return 16
+    return None
+
+
+def extract_income_cap_from_message(message_text):
+    for phrase, amount in ASSISTANT_INCOME_PHRASES.items():
+        if phrase in message_text:
+            return amount
+
+    patterns = [
+        r"(?:income|salary|earning|earnings)\D{0,20}(?:below|under|less than|upto|up to)?\s*₹?\s*(\d+(?:\.\d+)?)\s*(lakh|lac|lakhs|crore|k|thousand)?",
+        r"(?:below|under|less than|upto|up to)\s*₹?\s*(\d+(?:\.\d+)?)\s*(lakh|lac|lakhs|crore|k|thousand)\s*(?:annual\s*)?(?:income|salary|earning|earnings)",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, message_text)
+        if not match:
+            continue
+        value, unit = match.group(1), match.group(2) or ""
+        amount = amount_from_unit(value, unit)
+        if amount:
+            return amount
+
+    return None
+
+
+def extract_profile_hints(message_text):
+    occupation = None
+    occupation_hits = [
+        (len(keyword), mapped_occupation)
+        for keyword, mapped_occupation in ASSISTANT_OCCUPATION_HINTS.items()
+        if keyword in message_text
+    ]
+    if occupation_hits:
+        occupation_hits.sort(key=lambda row: row[0], reverse=True)
+        occupation = occupation_hits[0][1]
+
+    return {
+        "occupation": occupation,
+        "age": extract_age_from_message(message_text),
+        "income_cap": extract_income_cap_from_message(message_text),
+        "category": infer_category_from_message(message_text),
+    }
+
+
+def scheme_is_eligible_for_profile(scheme, profile):
+    try:
+        scheme_min_age = int(scheme.get("min_age"))
+        scheme_max_age = int(scheme.get("max_age"))
+        scheme_max_income = int(scheme.get("max_income"))
+    except (TypeError, ValueError):
+        return False
+
+    profile_age = profile.get("age")
+    if profile_age is not None and not (scheme_min_age <= profile_age <= scheme_max_age):
+        return False
+
+    income_cap = profile.get("income_cap")
+    if income_cap is not None and int(income_cap) > scheme_max_income:
+        return False
+
+    desired_occupation = profile.get("occupation")
+    scheme_occupation = normalize_occupation(scheme.get("occupation"))
+    if desired_occupation and scheme_occupation and desired_occupation != scheme_occupation:
+        return False
+
+    return True
+
+
+def score_scheme_for_message(scheme, message_terms, message_text, profile):
+    name = normalize_text(scheme.get("name", ""))
+    benefit = normalize_text(scheme.get("benefit", ""))
+    category = normalize_text(scheme.get("category", ""))
+    source = normalize_text(scheme.get("source", ""))
+    scheme_occupation = normalize_occupation(scheme.get("occupation", ""))
+    score = 0
+
+    for term in message_terms:
+        if term in name:
+            score += 3
+        if term in benefit:
+            score += 1
+        if term in category:
+            score += 2
+        if term in source:
+            score += 1
+
+    if profile.get("occupation") and profile.get("occupation") == scheme_occupation:
+        score += 6
+    elif scheme_occupation and scheme_occupation in message_text:
+        score += 2
+
+    if profile.get("category") and normalize_text(profile["category"]) == category:
+        score += 4
+
+    if profile.get("age") is not None:
+        score += 1
+    if profile.get("income_cap") is not None:
+        score += 1
+    if scheme.get("apply_url"):
+        score += 1
+
+    return score
+
+
+def format_assistant_scheme_row(index, scheme):
+    scheme_name = scheme.get("name", "Unnamed Scheme")
+    scheme_benefit = scheme.get("benefit", "Benefit information unavailable")
+    scheme_category = scheme.get("category", "General")
+    apply_url = scheme.get("apply_url", "Official portal unavailable")
+    source = scheme.get("source", "Official source")
+    return (
+        f"{index}. {scheme_name} ({scheme_category})\n"
+        f"   Benefit: {scheme_benefit}\n"
+        f"   Apply: {apply_url}\n"
+        f"   Source: {source}"
+    )
+
+
+def format_profile_summary(profile):
+    summary_parts = []
+    if profile.get("occupation"):
+        summary_parts.append(f"occupation: {profile['occupation'].replace('_', ' ')}")
+    if profile.get("age") is not None:
+        summary_parts.append(f"age: {profile['age']}")
+    if profile.get("income_cap") is not None:
+        summary_parts.append(f"income up to {format_rupees(profile['income_cap'])}")
+    if profile.get("category"):
+        summary_parts.append(f"focus: {profile['category']}")
+    return ", ".join(summary_parts)
+
+
+def suggest_schemes_from_message(message, max_results=5, profile=None):
     message_text = normalize_text(message)
     schemes = load_schemes()
     if not message_text or not schemes:
         return []
 
-    message_terms = {
-        term
-        for term in message_text.replace("/", " ").replace("-", " ").split()
-        if len(term) >= 3
-    }
+    profile = profile or extract_profile_hints(message_text)
+    message_terms = {term for term in re.findall(r"[a-z0-9]+", message_text) if len(term) >= 3}
     ranked_matches = []
 
     for scheme in schemes:
-        name = normalize_text(scheme.get("name", ""))
-        benefit = normalize_text(scheme.get("benefit", ""))
-        scheme_occupation = normalize_occupation(scheme.get("occupation", ""))
-        score = 0
-
-        for term in message_terms:
-            if term in name:
-                score += 2
-            if term in benefit:
-                score += 1
-
-        if scheme_occupation and scheme_occupation in message_text:
-            score += 3
-
-        for keyword, expected_occupation in ASSISTANT_OCCUPATION_HINTS.items():
-            if keyword in message_text and scheme_occupation == expected_occupation:
-                score += 3
-
+        if not scheme_is_eligible_for_profile(scheme, profile):
+            continue
+        score = score_scheme_for_message(scheme, message_terms, message_text, profile)
         if score > 0:
             ranked_matches.append((score, scheme))
 
-    ranked_matches.sort(key=lambda row: row[0], reverse=True)
+    if not ranked_matches and profile.get("category"):
+        preferred_category = normalize_text(profile["category"])
+        for scheme in schemes:
+            if normalize_text(scheme.get("category", "")) == preferred_category:
+                ranked_matches.append((2, scheme))
+
+    ranked_matches.sort(key=lambda row: (row[0], row[1].get("name", "")), reverse=True)
     return [scheme for _, scheme in ranked_matches[:max_results]]
 
 
@@ -247,34 +451,71 @@ def build_assistant_reply(message):
     if gemini_response:
         return gemini_response
 
-    if any(greet in message_text for greet in ("hello", "hi", "hey", "namaste")):
+    if re.search(r"\b(hello|hi|hey|namaste)\b", message_text):
         return (
-            "Hello! I can help you find relevant government schemes. "
-            "Tell me your occupation, age group, or income range, and I will suggest options."
+            "Hello! Share your age, occupation, and annual income, and I will suggest the best schemes "
+            "with direct official apply links."
         )
 
-    if "how" in message_text and ("use" in message_text or "apply" in message_text or "form" in message_text):
+    profile = extract_profile_hints(message_text)
+    suggested = suggest_schemes_from_message(message_text, max_results=5, profile=profile)
+
+    if any(keyword in message_text for keyword in ("document", "documents", "paper", "papers", "certificate", "proof")):
+        lines = [
+            "For most scheme applications, keep these ready:",
+            "- Aadhaar card",
+            "- Income certificate",
+            "- Domicile/residence proof",
+            "- Bank passbook copy",
+            "- Category certificate (if applicable)",
+            "- Passport-size photo",
+        ]
+        if suggested:
+            lines.append("Start with these likely schemes:")
+            for idx, scheme in enumerate(suggested[:3], start=1):
+                lines.append(format_assistant_scheme_row(idx, scheme))
+        return "\n".join(lines)
+
+    if any(keyword in message_text for keyword in ("compare", "difference", "better option", "vs")) and len(suggested) >= 2:
+        first = suggested[0]
+        second = suggested[1]
         return (
-            "Use the form above by selecting Age Group, Annual Income, and Occupation, then click "
-            "'Find My Schemes'. I can also suggest options if you describe your profile in chat."
+            "Quick comparison:\n"
+            f"1) {first.get('name', 'Scheme 1')} - {first.get('benefit', 'Benefit info unavailable')}\n"
+            f"   Apply: {first.get('apply_url', 'Official portal unavailable')}\n"
+            f"2) {second.get('name', 'Scheme 2')} - {second.get('benefit', 'Benefit info unavailable')}\n"
+            f"   Apply: {second.get('apply_url', 'Official portal unavailable')}\n"
+            "Choose based on your eligibility and the benefit type you need most."
         )
 
-    suggested = suggest_schemes_from_message(message_text)
+    if any(keyword in message_text for keyword in ("how", "apply", "registration", "form", "steps")):
+        lines = [
+            "Application flow:",
+            "1. Check eligibility (age, occupation, income).",
+            "2. Keep core documents ready (ID, income, bank details).",
+            "3. Open the official apply portal for your selected scheme.",
+            "4. Complete online form and upload documents.",
+            "5. Save acknowledgement number and track status.",
+        ]
+        if suggested:
+            lines.append("Suggested schemes for your query:")
+            for idx, scheme in enumerate(suggested[:3], start=1):
+                lines.append(format_assistant_scheme_row(idx, scheme))
+        return "\n".join(lines)
+
     if suggested:
-        lines = []
-        for scheme in suggested:
-            scheme_name = scheme.get("name", "Unnamed Scheme")
-            scheme_benefit = scheme.get("benefit", "Benefit information unavailable")
-            lines.append(f"- {scheme_name}: {scheme_benefit}")
-        return (
-            "Based on your message, these schemes may be relevant:\n"
-            + "\n".join(lines)
-            + "\nYou can submit the main form for a stricter eligibility match."
-        )
+        lines = ["Based on your profile/query, these schemes are most relevant:"]
+        for idx, scheme in enumerate(suggested, start=1):
+            lines.append(format_assistant_scheme_row(idx, scheme))
+        profile_summary = format_profile_summary(profile)
+        if profile_summary:
+            lines.append(f"Profile inferred: {profile_summary}.")
+        lines.append("Tip: Verify latest deadlines and required documents on each official portal before applying.")
+        return "\n".join(lines)
 
     return (
-        "I could not find a strong match yet. Please include details like occupation "
-        "(student/farmer/etc.), age group, and income range."
+        "I need a bit more detail to suggest accurate schemes. Please include your age (or age group), "
+        "occupation, annual income, and preferred category (education/health/agriculture/housing)."
     )
 
 

@@ -41,7 +41,8 @@ class AppRoutesTestCase(unittest.TestCase):
             },
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Scholarship Scheme", response.data)
+        self.assertIn(b"Rajarshi Chhatrapati Shahu Maharaj Scholarship", response.data)
+        self.assertIn(b"Apply on Official Portal", response.data)
 
     def test_result_page_validation_error(self):
         response = self.client.post(
@@ -67,6 +68,17 @@ class AppRoutesTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.is_json)
         self.assertIn("reply", response.get_json())
+
+    def test_assistant_complex_query_includes_apply_links(self):
+        response = self.client.post(
+            "/api/assistant",
+            json={"message": "I am 22 years old student, income below 2 lakh. How to apply?"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.is_json)
+        reply = response.get_json().get("reply", "")
+        self.assertIn("Application flow", reply)
+        self.assertIn("Apply:", reply)
 
     def test_assistant_endpoint_message_validation(self):
         response = self.client.post("/api/assistant", json={"message": ""})
