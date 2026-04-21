@@ -1,0 +1,162 @@
+[
+  {
+    "name": "Mahatma Jyotirao Phule Jan Arogya Yojana (MJPJAY)",
+    "min_age": 0,
+    "max_age": 200,
+    "max_income": 250000,
+    "occupation": "daily_wage_worker",
+    "benefit": "Cashless tertiary healthcare cover for eligible low-income families in Maharashtra."
+  },
+  {
+    "name": "Pradhan Mantri Jan Arogya Yojana (PM-JAY) - Maharashtra",
+    "min_age": 0,
+    "max_age": 200,
+    "max_income": 250000,
+    "occupation": "unemployed",
+    "benefit": "Health insurance support for hospitalization through empanelled hospitals."
+  },
+  {
+    "name": "Mahatma Gandhi National Rural Employment Guarantee Scheme (MGNREGS)",
+    "min_age": 18,
+    "max_age": 60,
+    "max_income": 250000,
+    "occupation": "daily_wage_worker",
+    "benefit": "Wage employment opportunities for rural households."
+  },
+  {
+    "name": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+    "min_age": 18,
+    "max_age": 70,
+    "max_income": 1000000,
+    "occupation": "farmer",
+    "benefit": "Direct annual income support to eligible farmer families."
+  },
+  {
+    "name": "Namo Shetkari Mahasanman Nidhi Yojana",
+    "min_age": 18,
+    "max_age": 70,
+    "max_income": 1000000,
+    "occupation": "farmer",
+    "benefit": "Additional state income support for PM-KISAN beneficiary farmers in Maharashtra."
+  },
+  {
+    "name": "Pradhan Mantri Fasal Bima Yojana (PMFBY) - Maharashtra",
+    "min_age": 18,
+    "max_age": 70,
+    "max_income": 1000000,
+    "occupation": "farmer",
+    "benefit": "Crop insurance protection against yield loss and natural calamities."
+  },
+  {
+    "name": "Baliraja Chetana Yojana",
+    "min_age": 18,
+    "max_age": 65,
+    "max_income": 500000,
+    "occupation": "farmer",
+    "benefit": "Mental health and support interventions for distressed farmers."
+  },
+  {
+    "name": "Mukhyamantri Saur Krushi Vahini Yojana",
+    "min_age": 18,
+    "max_age": 70,
+    "max_income": 1000000,
+    "occupation": "farmer",
+    "benefit": "Improved daytime electricity access for agriculture through solar feeder projects."
+  },
+  {
+    "name": "Majhi Kanya Bhagyashree Yojana",
+    "min_age": 0,
+    "max_age": 40,
+    "max_income": 800000,
+    "occupation": "unemployed",
+    "benefit": "Financial incentive support for families with girl children."
+  },
+  {
+    "name": "Lek Ladki Yojana",
+    "min_age": 0,
+    "max_age": 25,
+    "max_income": 100000,
+    "occupation": "student",
+    "benefit": "Stage-wise financial assistance for girls from eligible families."
+  },
+  {
+    "name": "Savitribai Phule Scholarship for Girls",
+    "min_age": 10,
+    "max_age": 25,
+    "max_income": 250000,
+    "occupation": "student",
+    "benefit": "Scholarship support to encourage school and college education for girls."
+  },
+  {
+    "name": "Rajarshi Chhatrapati Shahu Maharaj Scholarship",
+    "min_age": 17,
+    "max_age": 30,
+    "max_income": 800000,
+    "occupation": "student",
+    "benefit": "Tuition and education fee support for eligible students in higher education."
+  },
+  {
+    "name": "Post Matric Scholarship for SC Students - Maharashtra",
+    "min_age": 15,
+    "max_age": 35,
+    "max_income": 250000,
+    "occupation": "student",
+    "benefit": "Fee reimbursement and maintenance allowance for SC students."
+  },
+  {
+    "name": "Post Matric Scholarship for OBC Students - Maharashtra",
+    "min_age": 15,
+    "max_age": 35,
+    "max_income": 150000,
+    "occupation": "student",
+    "benefit": "Educational financial aid for OBC students pursuing post-matric studies."
+  },
+  {
+    "name": "EBC Tuition Fee Waiver Scheme - Maharashtra",
+    "min_age": 17,
+    "max_age": 35,
+    "max_income": 800000,
+    "occupation": "student",
+    "benefit": "Tuition fee concession for economically weaker students in professional courses."
+  },
+  {
+    "name": "Chief Minister Employment Generation Programme (CMEGP)",
+    "min_age": 18,
+    "max_age": 55,
+    "max_income": 1000000,
+    "occupation": "self_employed",
+    "benefit": "Subsidy-linked support to start micro enterprises in manufacturing and services."
+  },
+  {
+    "name": "Pradhan Mantri Mudra Yojana (MUDRA)",
+    "min_age": 18,
+    "max_age": 60,
+    "max_income": 1000000,
+    "occupation": "self_employed",
+    "benefit": "Collateral-free loans for small businesses and entrepreneurs."
+  },
+  {
+    "name": "Pradhan Mantri Awas Yojana - Urban (PMAY-U) Maharashtra",
+    "min_age": 18,
+    "max_age": 60,
+    "max_income": 1000000,
+    "occupation": "salaried_employee",
+    "benefit": "Housing assistance and interest subsidy for eligible urban households."
+  },
+  {
+    "name": "Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Maharashtra",
+    "min_age": 18,
+    "max_age": 60,
+    "max_income": 250000,
+    "occupation": "daily_wage_worker",
+    "benefit": "Financial support to build pucca houses for rural low-income families."
+  },
+  {
+    "name": "Shravan Bal Seva State Pension Scheme",
+    "min_age": 60,
+    "max_age": 200,
+    "max_income": 21000,
+    "occupation": "senior_citizen",
+    "benefit": "Monthly pension assistance for eligible elderly citizens in Maharashtra."
+  }
+]
