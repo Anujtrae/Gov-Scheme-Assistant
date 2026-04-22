@@ -58,6 +58,8 @@ class AppRoutesTestCase(unittest.TestCase):
     def _logout(self):
         return self.client.get("/logout", follow_redirects=True)
 
+    # ─── Auth Tests ───────────────────────────────
+
     def test_home_page_shows_auth_when_logged_out(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
@@ -86,6 +88,8 @@ class AppRoutesTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Find the best government schemes for you", response.data)
 
+    # ─── Result Page Tests ────────────────────────
+
     def test_result_requires_login(self):
         response = self.client.post(
             "/result",
@@ -109,15 +113,57 @@ class AppRoutesTestCase(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Recommended schemes for your profile", response.data)
+        self.assertIn(b"Rajarshi Chhatrapati Shahu Maharaj Scholarship", response.data)
+        self.assertIn(b"Apply on Official Portal", response.data)
 
         users = self._load_users()
         actions = [event.get("action") for event in users[0].get("activities", [])]
         self.assertIn("scheme_search", actions)
 
+    def test_result_page_validation_error(self):
+        self._signup()
+        response = self.client.post(
+            "/result",
+            data={
+                "age": "",
+                "income": "",
+                "occupation": "",
+            },
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b"Input validation failed", response.data)
+
+    # ─── Assistant Tests ──────────────────────────
+
     def test_assistant_requires_login(self):
         response = self.client.post("/api/assistant", json={"message": "hello"})
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.get_json().get("error"), "Please sign in to use the assistant.")
+
+    def test_assistant_endpoint_returns_reply(self):
+        self._signup()
+        response = self.client.post("/api/assistant", json={"message": "I am a student with low income"})
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.is_json)
+        self.assertIn("reply", response.get_json())
+
+    def test_assistant_complex_query_includes_apply_links(self):
+        self._signup()
+        response = self.client.post(
+            "/api/assistant",
+            json={"message": "I am 22 years old student, income below 2 lakh. How to apply?"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.is_json)
+        reply = response.get_json().get("reply", "")
+        self.assertIn("Application flow", reply)
+        self.assertIn("Apply:", reply)
+
+    def test_assistant_endpoint_message_validation(self):
+        self._signup()
+        response = self.client.post("/api/assistant", json={"message": ""})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.get_json().get("error"), "Please provide a non-empty 'message' field.")
 
     def test_assistant_endpoint_api_key_enforcement_when_logged_in(self):
         self._signup()
@@ -143,12 +189,16 @@ class AppRoutesTestCase(unittest.TestCase):
         actions = [event.get("action") for event in users[0].get("activities", [])]
         self.assertIn("assistant_query", actions)
 
+    # ─── History Tests ────────────────────────────
+
     def test_history_page_loads_for_authenticated_user(self):
         self._signup()
         response = self.client.get("/history")
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Account History", response.data)
         self.assertIn(b"Task Activity", response.data)
+
+    # ─── API Tests ────────────────────────────────
 
     def test_api_health(self):
         response = self.client.get("/api/health")

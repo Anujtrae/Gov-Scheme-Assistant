@@ -5,7 +5,10 @@
     "max_age": 200,
     "max_income": 250000,
     "occupation": "daily_wage_worker",
-    "benefit": "Cashless tertiary healthcare cover for eligible low-income families in Maharashtra."
+    "category": "Health",
+    "benefit": "Cashless tertiary healthcare cover for eligible low-income families in Maharashtra.",
+    "apply_url": "https://www.jeevandayee.gov.in",
+    "source": "Government of Maharashtra"
   },
   {
     "name": "Pradhan Mantri Jan Arogya Yojana (PM-JAY) - Maharashtra",
@@ -13,15 +16,10 @@
     "max_age": 200,
     "max_income": 250000,
     "occupation": "unemployed",
-    "benefit": "Health insurance support for hospitalization through empanelled hospitals."
-  },
-  {
-    "name": "Mahatma Gandhi National Rural Employment Guarantee Scheme (MGNREGS)",
-    "min_age": 18,
-    "max_age": 60,
-    "max_income": 250000,
-    "occupation": "daily_wage_worker",
-    "benefit": "Wage employment opportunities for rural households."
+    "category": "Health",
+    "benefit": "Cashless hospitalization cover through empanelled hospitals for eligible beneficiaries.",
+    "apply_url": "https://beneficiary.nha.gov.in",
+    "source": "National Health Authority"
   },
   {
     "name": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
@@ -29,7 +27,10 @@
     "max_age": 70,
     "max_income": 1000000,
     "occupation": "farmer",
-    "benefit": "Direct annual income support to eligible farmer families."
+    "category": "Agriculture",
+    "benefit": "Direct income support transferred in installments to eligible farmer families.",
+    "apply_url": "https://pmkisan.gov.in",
+    "source": "Ministry of Agriculture & Farmers Welfare"
   },
   {
     "name": "Namo Shetkari Mahasanman Nidhi Yojana",
@@ -37,23 +38,54 @@
     "max_age": 70,
     "max_income": 1000000,
     "occupation": "farmer",
-    "benefit": "Additional state income support for PM-KISAN beneficiary farmers in Maharashtra."
+    "category": "Agriculture",
+    "benefit": "Additional Maharashtra state income support for PM-KISAN beneficiary farmers.",
+    "apply_url": "https://nsmny.mahait.org",
+    "source": "Government of Maharashtra"
   },
   {
-    "name": "Pradhan Mantri Fasal Bima Yojana (PMFBY) - Maharashtra",
+    "name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
     "min_age": 18,
     "max_age": 70,
     "max_income": 1000000,
     "occupation": "farmer",
-    "benefit": "Crop insurance protection against yield loss and natural calamities."
+    "category": "Agriculture",
+    "benefit": "Crop insurance support against yield losses due to natural calamities.",
+    "apply_url": "https://pmfby.gov.in",
+    "source": "Ministry of Agriculture & Farmers Welfare"
   },
   {
-    "name": "Baliraja Chetana Yojana",
+    "name": "Kisan Credit Card (KCC)",
     "min_age": 18,
-    "max_age": 65,
-    "max_income": 500000,
+    "max_age": 70,
+    "max_income": 1000000,
     "occupation": "farmer",
-    "benefit": "Mental health and support interventions for distressed farmers."
+    "category": "Agriculture",
+    "benefit": "Access to timely and affordable credit for crop and allied farming activities.",
+    "apply_url": "https://www.myscheme.gov.in/schemes/kcc",
+    "source": "Ministry of Agriculture & Farmers Welfare"
+  },
+  {
+    "name": "Soil Health Card Scheme",
+    "min_age": 18,
+    "max_age": 70,
+    "max_income": 1000000,
+    "occupation": "farmer",
+    "category": "Agriculture",
+    "benefit": "Soil nutrient testing and recommendations to improve farm productivity.",
+    "apply_url": "https://soilhealth.dac.gov.in",
+    "source": "Ministry of Agriculture & Farmers Welfare"
+  },
+  {
+    "name": "National Agriculture Market (e-NAM)",
+    "min_age": 18,
+    "max_age": 70,
+    "max_income": 1000000000000,
+    "occupation": "farmer",
+    "category": "Agriculture",
+    "benefit": "Digital agri-market access for better price discovery and transparent trade.",
+    "apply_url": "https://www.enam.gov.in",
+    "source": "Ministry of Agriculture & Farmers Welfare"
   },
   {
     "name": "Mukhyamantri Saur Krushi Vahini Yojana",
@@ -61,79 +93,32 @@
     "max_age": 70,
     "max_income": 1000000,
     "occupation": "farmer",
-    "benefit": "Improved daytime electricity access for agriculture through solar feeder projects."
+    "category": "Agriculture",
+    "benefit": "Support for reliable daytime farm electricity through solarized feeders.",
+    "apply_url": "https://www.mahadiscom.in",
+    "source": "Maharashtra State Electricity Distribution Co. Ltd."
   },
   {
-    "name": "Majhi Kanya Bhagyashree Yojana",
-    "min_age": 0,
-    "max_age": 40,
-    "max_income": 800000,
-    "occupation": "unemployed",
-    "benefit": "Financial incentive support for families with girl children."
-  },
-  {
-    "name": "Lek Ladki Yojana",
-    "min_age": 0,
-    "max_age": 25,
-    "max_income": 100000,
-    "occupation": "student",
-    "benefit": "Stage-wise financial assistance for girls from eligible families."
-  },
-  {
-    "name": "Savitribai Phule Scholarship for Girls",
-    "min_age": 10,
-    "max_age": 25,
-    "max_income": 250000,
-    "occupation": "student",
-    "benefit": "Scholarship support to encourage school and college education for girls."
-  },
-  {
-    "name": "Rajarshi Chhatrapati Shahu Maharaj Scholarship",
-    "min_age": 17,
-    "max_age": 30,
-    "max_income": 800000,
-    "occupation": "student",
-    "benefit": "Tuition and education fee support for eligible students in higher education."
-  },
-  {
-    "name": "Post Matric Scholarship for SC Students - Maharashtra",
-    "min_age": 15,
-    "max_age": 35,
-    "max_income": 250000,
-    "occupation": "student",
-    "benefit": "Fee reimbursement and maintenance allowance for SC students."
-  },
-  {
-    "name": "Post Matric Scholarship for OBC Students - Maharashtra",
-    "min_age": 15,
-    "max_age": 35,
-    "max_income": 150000,
-    "occupation": "student",
-    "benefit": "Educational financial aid for OBC students pursuing post-matric studies."
-  },
-  {
-    "name": "EBC Tuition Fee Waiver Scheme - Maharashtra",
-    "min_age": 17,
-    "max_age": 35,
-    "max_income": 800000,
-    "occupation": "student",
-    "benefit": "Tuition fee concession for economically weaker students in professional courses."
-  },
-  {
-    "name": "Chief Minister Employment Generation Programme (CMEGP)",
-    "min_age": 18,
-    "max_age": 55,
-    "max_income": 1000000,
-    "occupation": "self_employed",
-    "benefit": "Subsidy-linked support to start micro enterprises in manufacturing and services."
-  },
-  {
-    "name": "Pradhan Mantri Mudra Yojana (MUDRA)",
+    "name": "Mahatma Gandhi National Rural Employment Guarantee Scheme (MGNREGS)",
     "min_age": 18,
     "max_age": 60,
-    "max_income": 1000000,
-    "occupation": "self_employed",
-    "benefit": "Collateral-free loans for small businesses and entrepreneurs."
+    "max_income": 250000,
+    "occupation": "daily_wage_worker",
+    "category": "Employment",
+    "benefit": "Guaranteed wage employment opportunities for rural households.",
+    "apply_url": "https://nrega.nic.in",
+    "source": "Ministry of Rural Development"
+  },
+  {
+    "name": "Pradhan Mantri Awas Yojana - Gramin (PMAY-G)",
+    "min_age": 18,
+    "max_age": 60,
+    "max_income": 250000,
+    "occupation": "daily_wage_worker",
+    "category": "Housing",
+    "benefit": "Financial support for construction of pucca houses in rural areas.",
+    "apply_url": "https://pmayg.nic.in",
+    "source": "Ministry of Rural Development"
   },
   {
     "name": "Pradhan Mantri Awas Yojana - Urban (PMAY-U) Maharashtra",
@@ -141,15 +126,274 @@
     "max_age": 60,
     "max_income": 1000000,
     "occupation": "salaried_employee",
-    "benefit": "Housing assistance and interest subsidy for eligible urban households."
+    "category": "Housing",
+    "benefit": "Housing subsidy and affordable home support for urban beneficiaries.",
+    "apply_url": "https://pmaymis.gov.in",
+    "source": "Ministry of Housing and Urban Affairs"
   },
   {
-    "name": "Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Maharashtra",
+    "name": "PM Street Vendor's AtmaNirbhar Nidhi (PM SVANidhi)",
     "min_age": 18,
     "max_age": 60,
+    "max_income": 500000,
+    "occupation": "self_employed",
+    "category": "Employment",
+    "benefit": "Working capital loan support for street vendors with digital incentives.",
+    "apply_url": "https://pmsvanidhi.mohua.gov.in",
+    "source": "Ministry of Housing and Urban Affairs"
+  },
+  {
+    "name": "Pradhan Mantri Mudra Yojana (MUDRA)",
+    "min_age": 18,
+    "max_age": 60,
+    "max_income": 1000000,
+    "occupation": "self_employed",
+    "category": "Employment",
+    "benefit": "Collateral-free business loans for micro and small enterprises.",
+    "apply_url": "https://www.mudra.org.in",
+    "source": "MUDRA Ltd."
+  },
+  {
+    "name": "Stand Up India Scheme",
+    "min_age": 18,
+    "max_age": 60,
+    "max_income": 1000000,
+    "occupation": "self_employed",
+    "category": "Employment",
+    "benefit": "Bank loan support for SC/ST and women entrepreneurs to start enterprises.",
+    "apply_url": "https://www.standupmitra.in",
+    "source": "Department of Financial Services"
+  },
+  {
+    "name": "Chief Minister Employment Generation Programme (CMEGP)",
+    "min_age": 18,
+    "max_age": 55,
+    "max_income": 1000000,
+    "occupation": "self_employed",
+    "category": "Employment",
+    "benefit": "Subsidy-linked support to establish micro enterprises in Maharashtra.",
+    "apply_url": "https://cmegp.mahaonline.gov.in",
+    "source": "Government of Maharashtra"
+  },
+  {
+    "name": "Prime Minister Employment Generation Programme (PMEGP)",
+    "min_age": 18,
+    "max_age": 60,
+    "max_income": 1000000,
+    "occupation": "self_employed",
+    "category": "Employment",
+    "benefit": "Credit-linked subsidy for setting up new micro-enterprises.",
+    "apply_url": "https://www.kviconline.gov.in/pmegpeportal",
+    "source": "KVIC"
+  },
+  {
+    "name": "Deendayal Antyodaya Yojana - National Urban Livelihoods Mission (DAY-NULM)",
+    "min_age": 18,
+    "max_age": 60,
+    "max_income": 300000,
+    "occupation": "unemployed",
+    "category": "Employment",
+    "benefit": "Livelihood, self-employment and skill support for urban poor households.",
+    "apply_url": "https://nulm.gov.in",
+    "source": "Ministry of Housing and Urban Affairs"
+  },
+  {
+    "name": "Pradhan Mantri Kaushal Vikas Yojana (PMKVY)",
+    "min_age": 18,
+    "max_age": 45,
+    "max_income": 500000,
+    "occupation": "unemployed",
+    "category": "Skill Development",
+    "benefit": "Short-term skill training with certification and placement support.",
+    "apply_url": "https://www.pmkvyofficial.org",
+    "source": "Ministry of Skill Development and Entrepreneurship"
+  },
+  {
+    "name": "National Apprenticeship Promotion Scheme (NAPS)",
+    "min_age": 18,
+    "max_age": 35,
+    "max_income": 1000000,
+    "occupation": "unemployed",
+    "category": "Skill Development",
+    "benefit": "Apprenticeship opportunities with stipend support and industry exposure.",
+    "apply_url": "https://www.apprenticeshipindia.gov.in",
+    "source": "Ministry of Skill Development and Entrepreneurship"
+  },
+  {
+    "name": "Rajarshi Chhatrapati Shahu Maharaj Scholarship",
+    "min_age": 17,
+    "max_age": 30,
+    "max_income": 800000,
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Scholarship support for higher education students from Maharashtra.",
+    "apply_url": "https://mahadbt.maharashtra.gov.in",
+    "source": "MahaDBT"
+  },
+  {
+    "name": "Post Matric Scholarship for SC Students - Maharashtra",
+    "min_age": 15,
+    "max_age": 35,
     "max_income": 250000,
-    "occupation": "daily_wage_worker",
-    "benefit": "Financial support to build pucca houses for rural low-income families."
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Tuition and maintenance assistance for eligible SC students.",
+    "apply_url": "https://mahadbt.maharashtra.gov.in",
+    "source": "MahaDBT"
+  },
+  {
+    "name": "Post Matric Scholarship for OBC Students - Maharashtra",
+    "min_age": 15,
+    "max_age": 35,
+    "max_income": 150000,
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Financial assistance for OBC students in post-matric education.",
+    "apply_url": "https://mahadbt.maharashtra.gov.in",
+    "source": "MahaDBT"
+  },
+  {
+    "name": "Post Matric Scholarship for VJNT Students - Maharashtra",
+    "min_age": 15,
+    "max_age": 35,
+    "max_income": 100000,
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Post-matric scholarship support for VJNT category students.",
+    "apply_url": "https://mahadbt.maharashtra.gov.in",
+    "source": "MahaDBT"
+  },
+  {
+    "name": "Tuition Fees and Examination Fees for OBC Students",
+    "min_age": 15,
+    "max_age": 35,
+    "max_income": 800000,
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Fee reimbursement assistance for eligible OBC students.",
+    "apply_url": "https://mahadbt.maharashtra.gov.in",
+    "source": "MahaDBT"
+  },
+  {
+    "name": "EBC Tuition Fee Waiver Scheme - Maharashtra",
+    "min_age": 17,
+    "max_age": 35,
+    "max_income": 800000,
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Tuition fee concession for economically backward students.",
+    "apply_url": "https://mahadbt.maharashtra.gov.in",
+    "source": "MahaDBT"
+  },
+  {
+    "name": "Dr. Panjabrao Deshmukh Hostel Maintenance Allowance",
+    "min_age": 17,
+    "max_age": 35,
+    "max_income": 800000,
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Hostel and maintenance allowance support for eligible students.",
+    "apply_url": "https://mahadbt.maharashtra.gov.in",
+    "source": "MahaDBT"
+  },
+  {
+    "name": "Savitribai Phule Scholarship for Girls",
+    "min_age": 10,
+    "max_age": 25,
+    "max_income": 250000,
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Scholarship support to promote girls' education continuity.",
+    "apply_url": "https://mahadbt.maharashtra.gov.in",
+    "source": "MahaDBT"
+  },
+  {
+    "name": "Minority Pre-Matric Scholarship",
+    "min_age": 10,
+    "max_age": 20,
+    "max_income": 100000,
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Scholarship aid for school students from notified minority communities.",
+    "apply_url": "https://scholarships.gov.in",
+    "source": "National Scholarship Portal"
+  },
+  {
+    "name": "Minority Post-Matric Scholarship",
+    "min_age": 15,
+    "max_age": 30,
+    "max_income": 200000,
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Scholarship support for minority students in higher classes and colleges.",
+    "apply_url": "https://scholarships.gov.in",
+    "source": "National Scholarship Portal"
+  },
+  {
+    "name": "AICTE Pragati Scholarship for Girls",
+    "min_age": 17,
+    "max_age": 30,
+    "max_income": 800000,
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Financial support for girl students pursuing technical education.",
+    "apply_url": "https://www.aicte-india.org/schemes/students-development-schemes/Pragati",
+    "source": "AICTE"
+  },
+  {
+    "name": "AICTE Saksham Scholarship",
+    "min_age": 17,
+    "max_age": 30,
+    "max_income": 800000,
+    "occupation": "student",
+    "category": "Education",
+    "benefit": "Scholarship support for specially-abled students in technical courses.",
+    "apply_url": "https://www.aicte-india.org/schemes/students-development-schemes/Saksham",
+    "source": "AICTE"
+  },
+  {
+    "name": "Majhi Kanya Bhagyashree Yojana",
+    "min_age": 0,
+    "max_age": 40,
+    "max_income": 800000,
+    "occupation": "unemployed",
+    "category": "Women & Child",
+    "benefit": "Financial encouragement and security support for families with girl children.",
+    "apply_url": "https://womenchild.maharashtra.gov.in",
+    "source": "Government of Maharashtra"
+  },
+  {
+    "name": "Lek Ladki Yojana",
+    "min_age": 0,
+    "max_age": 25,
+    "max_income": 100000,
+    "occupation": "student",
+    "category": "Women & Child",
+    "benefit": "Stage-based financial assistance for girl children from eligible families.",
+    "apply_url": "https://womenchild.maharashtra.gov.in",
+    "source": "Government of Maharashtra"
+  },
+  {
+    "name": "Pradhan Mantri Matru Vandana Yojana (PMMVY)",
+    "min_age": 19,
+    "max_age": 45,
+    "max_income": 800000,
+    "occupation": "unemployed",
+    "category": "Women & Child",
+    "benefit": "Maternity benefit support for eligible pregnant and lactating women.",
+    "apply_url": "https://pmmvy.wcd.gov.in",
+    "source": "Ministry of Women and Child Development"
+  },
+  {
+    "name": "Sukanya Samriddhi Yojana",
+    "min_age": 0,
+    "max_age": 10,
+    "max_income": 1000000000000,
+    "occupation": "unemployed",
+    "category": "Women & Child",
+    "benefit": "Long-term savings scheme for the education and future of girl child.",
+    "apply_url": "https://www.indiapost.gov.in/Financial/Pages/Content/Post-Office-Saving-Schemes.aspx",
+    "source": "Department of Posts"
   },
   {
     "name": "Shravan Bal Seva State Pension Scheme",
@@ -157,6 +401,42 @@
     "max_age": 200,
     "max_income": 21000,
     "occupation": "senior_citizen",
-    "benefit": "Monthly pension assistance for eligible elderly citizens in Maharashtra."
+    "category": "Senior Citizen",
+    "benefit": "Monthly pension assistance for eligible senior citizens in Maharashtra.",
+    "apply_url": "https://sjsa.maharashtra.gov.in",
+    "source": "Social Justice & Special Assistance Department"
+  },
+  {
+    "name": "Indira Gandhi National Old Age Pension Scheme (IGNOAPS)",
+    "min_age": 60,
+    "max_age": 200,
+    "max_income": 60000,
+    "occupation": "senior_citizen",
+    "category": "Senior Citizen",
+    "benefit": "Social pension support for elderly persons from low-income households.",
+    "apply_url": "https://nsap.nic.in",
+    "source": "Ministry of Rural Development"
+  },
+  {
+    "name": "Atal Pension Yojana (APY)",
+    "min_age": 18,
+    "max_age": 40,
+    "max_income": 1000000,
+    "occupation": "salaried_employee",
+    "category": "Social Security",
+    "benefit": "Contributory pension scheme for organized and unorganized workers.",
+    "apply_url": "https://www.npscra.nsdl.co.in/atal-pension-yojana.php",
+    "source": "PFRDA"
+  },
+  {
+    "name": "Rashtriya Vayoshri Yojana",
+    "min_age": 60,
+    "max_age": 200,
+    "max_income": 200000,
+    "occupation": "senior_citizen",
+    "category": "Senior Citizen",
+    "benefit": "Assistive devices and support for BPL senior citizens with age-related disabilities.",
+    "apply_url": "https://www.alimco.in/rvy",
+    "source": "Department of Social Justice & Empowerment"
   }
 ]

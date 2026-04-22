@@ -68,6 +68,35 @@
     .error-box {
       border-left: 4px solid #B91C1C;
     }
+    .result-actions {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .apply-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      border-radius: 10px;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--green-ind), #138a43);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 14px;
+      box-shadow: 0 4px 14px rgba(26,107,56,0.28);
+      transition: transform 0.2s;
+    }
+    .apply-btn:hover {
+      transform: translateY(-1px);
+    }
+    .source-note {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
     .back-row {
       margin-top: 20px;
       display: flex;
@@ -163,6 +192,13 @@
             <span class="meta-chip">Age: {{ s.min_age }} - {{ s.max_age }}</span>
             <span class="meta-chip">Income up to ₹{{ "{:,}".format(s.max_income|int) }}</span>
             <span class="meta-chip">Occupation: {{ s.occupation|replace("_", " ")|title }}</span>
+            <span class="meta-chip">Category: {{ s.category or "General" }}</span>
+          </div>
+          <div class="result-actions">
+            {% if s.apply_url %}
+              <a class="apply-btn" href="{{ s.apply_url }}" target="_blank" rel="noopener noreferrer">Apply on Official Portal ↗</a>
+            {% endif %}
+            <span class="source-note">Source: {{ s.source or "Government Portal" }}</span>
           </div>
         </article>
       {% endfor %}
