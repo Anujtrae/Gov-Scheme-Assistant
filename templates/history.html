@@ -80,8 +80,43 @@
 <body>
   <div class="gov-ribbon">
     <span>भारत सरकार &nbsp;|&nbsp; Government of India &nbsp;|&nbsp; Ministry of Social Justice &amp; Empowerment</span>
-    <span>
-      <a href="/">Home</a>
+    <span class="top-ribbon-actions">
+      <a href="/" class="top-nav-link">Home</a>
+      <a href="/saved-schemes" class="top-nav-link">My Saved Schemes</a>
+      <div class="notification-wrapper" data-notification-root>
+        <button type="button" class="notification-btn" data-notification-toggle aria-expanded="false" aria-haspopup="true" aria-label="Open notifications">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 4a5 5 0 0 0-5 5v2.1c0 .76-.3 1.5-.83 2.04L4.5 14.8a1 1 0 0 0 .7 1.7h13.6a1 1 0 0 0 .7-1.7l-1.67-1.66a2.88 2.88 0 0 1-.83-2.04V9a5 5 0 0 0-5-5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M9.5 17.5a2.6 2.6 0 0 0 5 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          {% if notification_unread_count %}
+            <span class="notification-badge">{{ notification_unread_count }}</span>
+          {% endif %}
+        </button>
+        <div class="notification-panel" data-notification-panel hidden>
+          <div class="notification-header">
+            <strong>Notifications</strong>
+            <span>{{ notification_unread_count }} New</span>
+          </div>
+          {% if notifications %}
+            <div class="notification-list">
+              {% for n in notifications %}
+                <article class="notification-item {% if n.is_new %}unread{% endif %}">
+                  <div class="notification-meta">
+                    <span class="notification-tag {{ n.type }}">{{ n.type_label }}</span>
+                    <span class="notification-date">{{ n.date }}</span>
+                  </div>
+                  <div class="notification-title">{{ n.title }}</div>
+                  <p class="notification-message">{{ n.message }}</p>
+                </article>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="notification-empty">No notifications available.</div>
+          {% endif %}
+        </div>
+      </div>
+      <span class="top-user-name">{{ current_user.name }}</span>
       <a href="/logout">Logout</a>
     </span>
   </div>
@@ -175,5 +210,45 @@
     Ministry of Social Justice &amp; Empowerment, Govt. of India &nbsp;|&nbsp;
     © 2026
   </footer>
+  <script>
+    function initNotificationDropdowns() {
+      const wrappers = document.querySelectorAll('[data-notification-root]');
+      if (!wrappers.length) return;
+
+      const closeAll = () => {
+        wrappers.forEach((node) => {
+          const panel = node.querySelector('[data-notification-panel]');
+          const toggle = node.querySelector('[data-notification-toggle]');
+          if (panel) panel.hidden = true;
+          if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        });
+      };
+
+      wrappers.forEach((node) => {
+        const panel = node.querySelector('[data-notification-panel]');
+        const toggle = node.querySelector('[data-notification-toggle]');
+        if (!panel || !toggle) return;
+
+        toggle.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const shouldOpen = panel.hidden;
+          closeAll();
+          panel.hidden = !shouldOpen;
+          toggle.setAttribute('aria-expanded', String(shouldOpen));
+        });
+
+        panel.addEventListener('click', (event) => {
+          event.stopPropagation();
+        });
+      });
+
+      document.addEventListener('click', () => closeAll());
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeAll();
+      });
+    }
+
+    initNotificationDropdowns();
+  </script>
 </body>
 </html>

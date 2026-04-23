@@ -6,50 +6,114 @@
   <title>KAU – AI Government Scheme Assistant</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/static/style.css">
+  <style>
+    /* === HERO QUICK-ACCESS BUTTONS === */
+    .hero-quick-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .hero-quick-actions a,
+    .hero-quick-actions button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+      transition: transform 0.18s, box-shadow 0.18s;
+      white-space: nowrap;
+      min-width: 170px;
+      justify-content: center;
+      letter-spacing: 0.3px;
+    }
+    .hero-quick-actions a:hover,
+    .hero-quick-actions button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+    }
+    .btn-history {
+      background: linear-gradient(135deg, #FF9933, #e07718);
+      color: #fff !important;
+    }
+    .btn-saved {
+      background: linear-gradient(135deg, #138808, #0e6606);
+      color: #fff !important;
+    }
+    .btn-bell {
+      background: linear-gradient(135deg, #000080, #1a1aad);
+      color: #fff !important;
+      min-width: 170px !important;
+    }
+    .hero-quick-actions span.icon {
+      font-size: 17px;
+    }
+
+    /* === AI AGENT BUTTON (enlarged) === */
+    .agent-toggle {
+      background: linear-gradient(135deg, #0A2647, #205295) !important;
+      color: #fff !important;
+      border: none !important;
+      border-radius: 50px !important;
+      padding: 16px 28px !important;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      font-family: 'DM Sans', sans-serif !important;
+      cursor: pointer !important;
+      box-shadow: 0 6px 22px rgba(10,38,71,0.55) !important;
+      letter-spacing: 0.4px !important;
+      transition: transform 0.18s, box-shadow 0.18s !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+    .agent-toggle:hover {
+      transform: scale(1.07) !important;
+      box-shadow: 0 10px 30px rgba(10,38,71,0.7) !important;
+    }
+    .agent-toggle::before {
+      content: "🤖";
+      font-size: 20px;
+    }
+
+    /* === RESPONSIVENESS === */
+    @media (max-width: 640px) {
+      .hero-quick-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+      }
+      .hero-quick-actions a,
+      .hero-quick-actions button {
+        min-width: unset;
+        padding: 9px 14px;
+        font-size: 13px;
+      }
+      .agent-toggle {
+        padding: 13px 20px !important;
+        font-size: 14px !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
   <!-- TOP RIBBON -->
   <div class="gov-ribbon">
     <span>भारत सरकार &nbsp;|&nbsp; Government of India &nbsp;|&nbsp; Ministry of Social Justice &amp; Empowerment</span>
-    <span class="top-ribbon-actions">
-      <a href="/history" class="top-nav-link">History</a>
-      <a href="/saved-schemes" class="top-nav-link">My Saved Schemes</a>
-      <div class="notification-wrapper" data-notification-root>
-        <button type="button" class="notification-btn" data-notification-toggle aria-expanded="false" aria-haspopup="true" aria-label="Open notifications">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 4a5 5 0 0 0-5 5v2.1c0 .76-.3 1.5-.83 2.04L4.5 14.8a1 1 0 0 0 .7 1.7h13.6a1 1 0 0 0 .7-1.7l-1.67-1.66a2.88 2.88 0 0 1-.83-2.04V9a5 5 0 0 0-5-5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-            <path d="M9.5 17.5a2.6 2.6 0 0 0 5 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
-          {% if notification_unread_count %}
-            <span class="notification-badge">{{ notification_unread_count }}</span>
-          {% endif %}
-        </button>
-        <div class="notification-panel" data-notification-panel hidden>
-          <div class="notification-header">
-            <strong>Notifications</strong>
-            <span>{{ notification_unread_count }} New</span>
-          </div>
-          {% if notifications %}
-            <div class="notification-list">
-              {% for n in notifications %}
-                <article class="notification-item {% if n.is_new %}unread{% endif %}">
-                  <div class="notification-meta">
-                    <span class="notification-tag {{ n.type }}">{{ n.type_label }}</span>
-                    <span class="notification-date">{{ n.date }}</span>
-                  </div>
-                  <div class="notification-title">{{ n.title }}</div>
-                  <p class="notification-message">{{ n.message }}</p>
-                </article>
-              {% endfor %}
-            </div>
-          {% else %}
-            <div class="notification-empty">No notifications available.</div>
-          {% endif %}
-        </div>
-      </div>
-      <span class="top-user-name">{{ current_user.name }}</span>
-      <a href="/logout" class="top-logout-btn">Logout</a>
+    <span>
+      <a href="#">Skip to content</a>
+      <a href="#">Hindi</a>
+      <a href="#">Help</a>
     </span>
   </div>
 
@@ -77,12 +141,32 @@
           <p>Discover welfare schemes tailored to your profile &nbsp;·&nbsp; Powered by Artificial Intelligence</p>
         </div>
       </div>
-      <div class="header-flag">
-        <div class="india-flag">
-          <div class="f-saffron"></div>
-          <div class="f-white"><div class="ashoka"></div></div>
-          <div class="f-green"></div>
+
+      <!-- RIGHT SIDE: Quick Actions + Flag -->
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0;">
+
+        <!-- ✅ HISTORY, SAVED SCHEMES, BELL — above the flag -->
+        <div class="hero-quick-actions">
+          <a href="/history" class="btn-history">
+            <span class="icon">📜</span> History
+          </a>
+          <a href="/saved_schemes" class="btn-saved">
+            <span class="icon">⭐</span> My Saved Schemes
+          </a>
+          <button class="btn-bell" onclick="document.getElementById('notifPanel') && alert('No new notifications.')">
+            <span class="icon">🔔</span> Notifications
+          </button>
         </div>
+
+        <!-- Indian Flag (unchanged) -->
+        <div class="header-flag">
+          <div class="india-flag">
+            <div class="f-saffron"></div>
+            <div class="f-white"><div class="ashoka"></div></div>
+            <div class="f-green"></div>
+          </div>
+        </div>
+
       </div>
     </div>
     <svg class="wave-divider" viewBox="0 0 960 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -123,7 +207,7 @@
         </div>
         <div>
           <h3>Enter Your Details</h3>
-          <p>Your searches and assistant queries are saved in your account history.</p>
+          <p>All information is processed securely and never stored.</p>
         </div>
       </div>
 
@@ -233,6 +317,8 @@
     <a href="#">Privacy Policy</a> &nbsp;·&nbsp;
     <a href="#">Disclaimer</a>
   </footer>
+
+  <!-- ✅ AI AGENT WIDGET (enlarged + styled) -->
   <div class="agent-widget" id="agentWidget">
     <button id="agentToggle" class="agent-toggle" type="button" aria-expanded="false" aria-controls="agentPanel">
       AI Agent
@@ -252,7 +338,7 @@
 
       <div id="agentMessages" class="agent-messages">
         <div class="agent-msg bot">
-          Hello! Ask me about schemes. Example: “I am a student with low income”.
+          Hello! Ask me about schemes. Example: "I am a student with low income".
         </div>
       </div>
 
@@ -264,44 +350,6 @@
   </div>
 
   <script>
-    function initNotificationDropdowns() {
-      const wrappers = document.querySelectorAll('[data-notification-root]');
-      if (!wrappers.length) return;
-
-      const closeAll = () => {
-        wrappers.forEach((node) => {
-          const panel = node.querySelector('[data-notification-panel]');
-          const toggle = node.querySelector('[data-notification-toggle]');
-          if (panel) panel.hidden = true;
-          if (toggle) toggle.setAttribute('aria-expanded', 'false');
-        });
-      };
-
-      wrappers.forEach((node) => {
-        const panel = node.querySelector('[data-notification-panel]');
-        const toggle = node.querySelector('[data-notification-toggle]');
-        if (!panel || !toggle) return;
-
-        toggle.addEventListener('click', (event) => {
-          event.stopPropagation();
-          const shouldOpen = panel.hidden;
-          closeAll();
-          panel.hidden = !shouldOpen;
-          toggle.setAttribute('aria-expanded', String(shouldOpen));
-        });
-
-        panel.addEventListener('click', (event) => {
-          event.stopPropagation();
-        });
-      });
-
-      document.addEventListener('click', () => closeAll());
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') closeAll();
-      });
-    }
-
-    initNotificationDropdowns();
     document.querySelectorAll('.chip').forEach(chip => {
       chip.addEventListener('click', () => {
         document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));

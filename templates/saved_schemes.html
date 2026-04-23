@@ -3,107 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KAU – Scheme Results</title>
+  <title>KAU – My Saved Schemes</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/static/style.css">
   <style>
-    .results-shell {
-      max-width: 960px;
+    .saved-shell {
+      max-width: 980px;
       margin: 0 auto;
       padding: 0 24px 60px;
     }
-    .result-card {
+    .saved-grid {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .saved-card {
       background: var(--white);
       border-radius: 14px;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-card);
       padding: 20px 22px;
-      margin-bottom: 14px;
     }
-    .card-head {
+    .saved-title-row {
       display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 14px;
+      gap: 10px;
+      margin-bottom: 8px;
     }
-    .result-title {
+    .saved-title {
       font-family: 'Noto Serif', serif;
       color: var(--navy);
-      font-size: 20px;
-      margin-bottom: 6px;
-      line-height: 1.3;
+      font-size: 21px;
+      line-height: 1.28;
     }
-    .score-wrap {
-      min-width: 108px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-    .eligibility-ring {
-      --score: 0;
-      width: 86px;
-      height: 86px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: conic-gradient(var(--green-ind) calc(var(--score) * 1%), rgba(32,82,149,0.14) 0);
-      box-shadow: inset 0 0 0 1px rgba(10,38,71,0.06);
-    }
-    .eligibility-ring::before {
-      content: "";
-      width: 66px;
-      height: 66px;
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: inset 0 0 0 1px var(--border);
-    }
-    .ring-value {
-      position: absolute;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--navy);
-      letter-spacing: -0.02em;
-    }
-    .ring-caption {
-      font-size: 11.5px;
+    .saved-time {
       color: var(--text-muted);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      font-size: 12px;
+      font-weight: 500;
     }
-    .score-tag {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 100px;
-      padding: 3px 10px;
-      font-size: 11.5px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      border: 1px solid;
-    }
-    .score-tag.high {
-      color: #0f6a34;
-      border-color: rgba(15,106,52,0.3);
-      background: rgba(26,107,56,0.1);
-    }
-    .score-tag.moderate {
-      color: #9a6700;
-      border-color: rgba(154,103,0,0.32);
-      background: rgba(232,119,34,0.12);
-    }
-    .score-tag.low {
-      color: #b91c1c;
-      border-color: rgba(185,28,28,0.32);
-      background: rgba(185,28,28,0.1);
-    }
-    .result-benefit {
+    .saved-benefit {
       color: var(--text-dark);
-      line-height: 1.55;
       font-size: 14.5px;
+      line-height: 1.55;
     }
     .meta-row {
-      margin-top: 10px;
+      margin-top: 12px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
@@ -117,60 +63,12 @@
       padding: 5px 10px;
       font-weight: 500;
     }
-    .status-box {
-      background: var(--white);
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-card);
-      padding: 24px;
-      text-align: center;
-      margin-bottom: 18px;
-    }
-    .status-box h3 {
-      font-family: 'Noto Serif', serif;
-      color: var(--navy);
-      margin-bottom: 8px;
-    }
-    .status-box p {
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-    .error-box {
-      border-left: 4px solid #B91C1C;
-    }
-    .result-actions {
+    .saved-actions {
       margin-top: 14px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       align-items: center;
-    }
-    .save-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--navy);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 10px 14px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .save-btn:hover {
-      border-color: rgba(20,66,114,0.35);
-      background: rgba(20,66,114,0.06);
-    }
-    .save-btn.saved {
-      border-color: rgba(26,107,56,0.3);
-      color: #0f6a34;
-      background: rgba(26,107,56,0.12);
-    }
-    .save-btn:disabled {
-      opacity: 0.72;
-      cursor: wait;
     }
     .apply-btn {
       display: inline-flex;
@@ -190,13 +88,53 @@
     .apply-btn:hover {
       transform: translateY(-1px);
     }
+    .remove-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      border: 1px solid rgba(185,28,28,0.28);
+      background: rgba(185,28,28,0.08);
+      color: #b91c1c;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .remove-btn:hover {
+      background: rgba(185,28,28,0.16);
+      border-color: rgba(185,28,28,0.42);
+    }
+    .remove-btn:disabled {
+      opacity: 0.72;
+      cursor: wait;
+    }
     .source-note {
       font-size: 12.5px;
       color: var(--text-muted);
     }
+    .status-box {
+      background: var(--white);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .status-box h3 {
+      font-family: 'Noto Serif', serif;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .status-box p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
     .save-feedback {
       margin: 0 auto 14px;
-      max-width: 960px;
+      max-width: 980px;
       border-radius: 10px;
       border: 1px solid rgba(26,107,56,0.24);
       background: rgba(26,107,56,0.11);
@@ -210,39 +148,12 @@
       background: rgba(185,28,28,0.1);
       color: #b91c1c;
     }
-    .score-breakdown {
-      margin-top: 12px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .score-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border-radius: 100px;
-      border: 1px solid var(--border);
-      padding: 5px 10px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--navy-mid);
-      background: #fff;
-    }
-    .score-chip .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      background: #94A3B8;
-    }
-    .score-chip.matched .dot { background: #1A6B38; }
-    .score-chip.partial .dot { background: #E87722; }
-    .score-chip.not_matched .dot { background: #B91C1C; }
-    .score-chip.unavailable .dot { background: #64748B; }
     .back-row {
       margin-top: 20px;
       display: flex;
       justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
     .back-link {
       display: inline-flex;
@@ -260,14 +171,6 @@
     .back-link:hover {
       border-color: var(--navy-light);
       background: rgba(32,82,149,0.06);
-    }
-    @media (max-width: 720px) {
-      .card-head {
-        flex-direction: column;
-      }
-      .score-wrap {
-        align-items: flex-start;
-      }
     }
   </style>
 </head>
@@ -335,8 +238,8 @@
           </svg>
         </div>
         <div class="header-titles">
-          <h1>AI-Powered Government<br>Scheme Assistant</h1>
-          <p>Personalised recommendations generated from your eligibility profile.</p>
+          <h1>My Saved Schemes</h1>
+          <p>Bookmarks to quickly revisit schemes and apply later.</p>
         </div>
       </div>
       <div class="header-flag">
@@ -352,93 +255,65 @@
     </svg>
   </header>
 
-  <main class="results-shell">
+  <main class="saved-shell">
     <div class="hero-tagline">
-      <div class="hero-badge">AI Match Results</div>
-      <h2>Recommended schemes for your profile</h2>
-      {% if schemes %}
-        <p>{{ schemes|length }} scheme(s) matched based on your selected details.</p>
-      {% else %}
-        <p>Review the result below and refine your details for better matches.</p>
-      {% endif %}
+      <div class="hero-badge">Saved for Later</div>
+      <h2>Your bookmarked schemes</h2>
+      <p id="savedCountText">{{ saved_schemes|length }} scheme(s) currently saved.</p>
     </div>
-    <div class="save-feedback" id="saveFeedback" hidden></div>
+    <div class="save-feedback" id="savedFeedback" hidden></div>
 
-    {% if error_message %}
-      <div class="status-box error-box">
-        <h3>Input validation failed</h3>
-        <p>{{ error_message }}</p>
-      </div>
-    {% elif schemes %}
-      {% for s in schemes %}
-        <article class="result-card">
-          <div class="card-head">
-            <div>
-              <h3 class="result-title">{{ s.name }}</h3>
-              <span class="score-tag {{ s.eligibility_label|lower }}">{{ s.eligibility_label }} Match</span>
-            </div>
-            <div class="score-wrap">
-              <div class="eligibility-ring" style="--score: {{ s.eligibility_score or 0 }};">
-                <span class="ring-value">{{ s.eligibility_score or 0 }}%</span>
-              </div>
-              <span class="ring-caption">Eligibility Score</span>
-            </div>
+    <section class="saved-grid" id="savedSchemeList">
+      {% for s in saved_schemes %}
+        <article class="saved-card" data-saved-card>
+          <div class="saved-title-row">
+            <h3 class="saved-title">{{ s.name }}</h3>
+            {% if s.saved_at %}
+              <span class="saved-time">Saved at: {{ s.saved_at }}</span>
+            {% endif %}
           </div>
-          <p class="result-benefit">{{ s.benefit }}</p>
+          <p class="saved-benefit">{{ s.benefit }}</p>
           <div class="meta-row">
             <span class="meta-chip">Age: {{ s.min_age }} - {{ s.max_age }}</span>
-            <span class="meta-chip">Income up to ₹{{ "{:,}".format(s.max_income|int) }}</span>
+            {% if s.max_income %}
+              <span class="meta-chip">Income up to ₹{{ "{:,}".format(s.max_income|int) }}</span>
+            {% endif %}
             <span class="meta-chip">Occupation: {{ s.occupation|replace("_", " ")|title }}</span>
             <span class="meta-chip">Category: {{ s.category or "General" }}</span>
           </div>
-          {% if s.eligibility_components %}
-            <div class="score-breakdown">
-              {% for component in s.eligibility_components %}
-                <span class="score-chip {{ component.status }}" title="{{ component.detail }}">
-                  <span class="dot"></span>
-                  {{ component.label }}: {{ component.score }}/{{ component.weight }}
-                </span>
-              {% endfor %}
-            </div>
-          {% endif %}
-          <div class="result-actions">
+          <div class="saved-actions">
             {% if s.apply_url %}
               <a class="apply-btn" href="{{ s.apply_url }}" target="_blank" rel="noopener noreferrer">Apply on Official Portal ↗</a>
             {% endif %}
-            {% set scheme_key = (s.name or '')|lower %}
-            {% set is_saved = saved_scheme_names is defined and scheme_key in saved_scheme_names %}
             <button
               type="button"
-              class="save-btn {% if is_saved %}saved{% endif %}"
-              data-save-scheme-btn
+              class="remove-btn"
+              data-remove-scheme-btn
               data-scheme-name="{{ s.name }}"
-              data-saved="{{ 'true' if is_saved else 'false' }}"
-              aria-pressed="{{ 'true' if is_saved else 'false' }}"
             >
-              {% if is_saved %}Saved{% else %}Save Scheme{% endif %}
+              Remove Saved Scheme
             </button>
             <span class="source-note">Source: {{ s.source or "Government Portal" }}</span>
           </div>
         </article>
       {% endfor %}
-    {% else %}
-      <div class="status-box">
-        <h3>No matching schemes found</h3>
-        <p>Try changing age group, income range, or occupation and search again.</p>
-      </div>
-    {% endif %}
+    </section>
+
+    <div class="status-box" id="savedEmptyState" {% if saved_schemes %}hidden{% endif %}>
+      <h3>No saved schemes yet</h3>
+      <p>Bookmark schemes from your result page to build your personal list.</p>
+    </div>
 
     <div class="back-row">
       <a href="/" class="back-link">← Back to Search</a>
+      <a href="/history" class="back-link">View Account History</a>
     </div>
   </main>
 
   <footer>
     <strong>KAU – Kalyaankari AI Upkaran</strong> &nbsp;|&nbsp;
     Ministry of Social Justice &amp; Empowerment, Govt. of India &nbsp;|&nbsp;
-    © 2026 &nbsp;|&nbsp;
-    <a href="#">Privacy Policy</a> &nbsp;·&nbsp;
-    <a href="#">Disclaimer</a>
+    © 2026
   </footer>
   <script>
     function initNotificationDropdowns() {
@@ -478,66 +353,70 @@
       });
     }
 
-    function showSaveFeedback(message, isError) {
-      const feedbackNode = document.getElementById('saveFeedback');
+    function showSavedFeedback(message, isError) {
+      const feedbackNode = document.getElementById('savedFeedback');
       if (!feedbackNode) return;
       feedbackNode.textContent = message;
       feedbackNode.classList.toggle('error', Boolean(isError));
       feedbackNode.hidden = false;
-      if (showSaveFeedback.hideTimer) {
-        window.clearTimeout(showSaveFeedback.hideTimer);
+      if (showSavedFeedback.hideTimer) {
+        window.clearTimeout(showSavedFeedback.hideTimer);
       }
-      showSaveFeedback.hideTimer = window.setTimeout(() => {
+      showSavedFeedback.hideTimer = window.setTimeout(() => {
         feedbackNode.hidden = true;
       }, 2600);
     }
 
-    function setSaveButtonState(button, isSaved) {
-      button.dataset.saved = isSaved ? 'true' : 'false';
-      button.setAttribute('aria-pressed', String(isSaved));
-      button.classList.toggle('saved', isSaved);
-      button.textContent = isSaved ? 'Saved' : 'Save Scheme';
+    function updateSavedCount() {
+      const cards = document.querySelectorAll('[data-saved-card]');
+      const countText = document.getElementById('savedCountText');
+      const emptyState = document.getElementById('savedEmptyState');
+      if (countText) {
+        countText.textContent = `${cards.length} scheme(s) currently saved.`;
+      }
+      if (emptyState) {
+        emptyState.hidden = cards.length !== 0;
+      }
     }
 
-    async function handleSaveButtonClick(event) {
+    async function handleRemoveScheme(event) {
       const button = event.currentTarget;
       const schemeName = button.getAttribute('data-scheme-name');
       if (!schemeName) return;
-
-      const currentlySaved = button.dataset.saved === 'true';
-      const endpoint = currentlySaved ? '/api/saved-schemes/remove' : '/api/saved-schemes/save';
-      const loadingText = currentlySaved ? 'Removing...' : 'Saving...';
+      const card = button.closest('[data-saved-card]');
 
       button.disabled = true;
-      button.textContent = loadingText;
+      const initialText = button.textContent;
+      button.textContent = 'Removing...';
 
       try {
-        const response = await fetch(endpoint, {
+        const response = await fetch('/api/saved-schemes/remove', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ scheme_name: schemeName }),
         });
         const payload = await response.json();
         if (!response.ok) {
-          throw new Error(payload.error || 'Unable to update saved schemes.');
+          throw new Error(payload.error || 'Unable to remove saved scheme.');
         }
-        const nextSavedState = !currentlySaved;
-        setSaveButtonState(button, nextSavedState);
-        showSaveFeedback(
-          nextSavedState ? 'Scheme saved to My Saved Schemes.' : 'Scheme removed from My Saved Schemes.',
-          false
-        );
+
+        if (card) {
+          card.remove();
+        }
+        updateSavedCount();
+        showSavedFeedback('Scheme removed from saved list.', false);
       } catch (error) {
-        setSaveButtonState(button, currentlySaved);
-        showSaveFeedback(error.message || 'Unable to update saved schemes.', true);
+        showSavedFeedback(error.message || 'Unable to remove saved scheme.', true);
       } finally {
         button.disabled = false;
+        button.textContent = initialText;
       }
     }
 
     initNotificationDropdowns();
-    document.querySelectorAll('[data-save-scheme-btn]').forEach((button) => {
-      button.addEventListener('click', handleSaveButtonClick);
+    updateSavedCount();
+    document.querySelectorAll('[data-remove-scheme-btn]').forEach((button) => {
+      button.addEventListener('click', handleRemoveScheme);
     });
   </script>
 </body>

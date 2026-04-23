@@ -143,6 +143,44 @@ ASSISTANT_OCCUPATION_HINTS = {
     "retired": "senior_citizen",
     "senior citizen": "senior_citizen",
 }
+SAMPLE_NOTIFICATIONS = [
+    {
+        "id": "notif-1",
+        "type": "latest_update",
+        "type_label": "Latest Update",
+        "title": "PMAY-U Maharashtra portal updated",
+        "message": "Income document checklist has been revised for 2026 applications.",
+        "date": "2026-04-22",
+        "is_new": True,
+    },
+    {
+        "id": "notif-2",
+        "type": "new_launch",
+        "type_label": "New Launch",
+        "title": "Digital Skill Boost Yojana announced",
+        "message": "New short-term stipend-backed digital training scheme for youth.",
+        "date": "2026-04-20",
+        "is_new": True,
+    },
+    {
+        "id": "notif-3",
+        "type": "deadline",
+        "type_label": "Deadline Reminder",
+        "title": "Post-Matric Scholarship deadline",
+        "message": "Apply before 30 April 2026 to avoid late submission issues.",
+        "date": "2026-04-19",
+        "is_new": False,
+    },
+    {
+        "id": "notif-4",
+        "type": "announcement",
+        "type_label": "Announcement",
+        "title": "Service maintenance advisory",
+        "message": "Scheme verification services may be slower on Sunday 10 PM-12 AM.",
+        "date": "2026-04-18",
+        "is_new": False,
+    },
+]
 
 
 
@@ -164,6 +202,24 @@ def truncate_text(value, max_length=140):
 def normalize_occupation(value):
     normalized = normalize_text(value)
     return OCCUPATION_NORMALIZATION.get(normalized, normalized)
+def get_notification_feed(max_items=6):
+    notifications = sorted(
+        SAMPLE_NOTIFICATIONS,
+        key=lambda row: row.get("date", ""),
+        reverse=True,
+    )
+    if max_items is None:
+        return notifications
+    return notifications[:max_items]
+
+
+def get_notification_context(max_items=6):
+    notifications = get_notification_feed(max_items=max_items)
+    unread_count = sum(1 for item in notifications if item.get("is_new"))
+    return {
+        "notifications": notifications,
+        "notification_unread_count": unread_count,
+    }
 
 
 def get_client_ip():
@@ -215,6 +271,172 @@ def find_user_by_id(store, user_id):
     return None
 
 
+def ensure_saved_schemes_list(user):
+    saved_items = user.get("saved_schemes")
+    if not isinstance(saved_items, list):
+        saved_items = []
+
+    normalized_items = []
+    seen_names = set()
+    for raw_item in saved_items:
+        if isinstance(raw_item, dict):
+            scheme_name = (raw_item.get("scheme_name") or raw_item.get("name") or "").strip()
+            saved_at = raw_item.get("saved_at")
+        else:
+            scheme_name = str(raw_item).strip()
+            saved_at = None
+
+        if not scheme_name:
+            continue
+
+        normalized_name = normalize_text(scheme_name)
+        if normalized_name in seen_names:
+            continue
+        seen_names.add(normalized_name)
+        normalized_items.append(
+            {
+                "scheme_name": scheme_name,
+                "saved_at": saved_at,
+            }
+        )
+
+    user["saved_schemes"] = normalized_items
+    return normalized_items
+
+
+def build_scheme_lookup():
+    lookup = {}
+    for scheme in load_schemes():
+        scheme_name = (scheme.get("name") or "").strip()
+        if not scheme_name:
+            continue
+        lookup[normalize_text(scheme_name)] = scheme
+    return lookup
+
+
+def get_saved_scheme_names_for_user(user_id):
+    store = load_user_store()
+    user = find_user_by_id(store, user_id)
+    if not user:
+        return set()
+
+    saved_items = ensure_saved_schemes_list(user)
+    return {normalize_text(item.get("scheme_name", "")) for item in saved_items if item.get("scheme_name")}
+
+
+def get_saved_schemes_for_user(user_id):
+    store = load_user_store()
+    user = find_user_by_id(store, user_id)
+    if not user:
+        return []
+
+    saved_items = ensure_saved_schemes_list(user)
+    scheme_lookup = build_scheme_lookup()
+    enriched_items = []
+    for item in saved_items:
+        scheme_name = (item.get("scheme_name") or "").strip()
+        if not scheme_name:
+            continue
+        saved_at = item.get("saved_at")
+        matched_scheme = scheme_lookup.get(normalize_text(scheme_name))
+        if matched_scheme:
+            scheme_data = {**matched_scheme}
+        else:
+            scheme_data = {
+                "name": scheme_name,
+                "benefit": "Saved scheme record. Official details are currently unavailable.",
+                "category": "General",
+                "occupation": "Not specified",
+                "min_age": "N/A",
+                "max_age": "N/A",
+                "max_income": 0,
+                "apply_url": "",
+                "source": "Saved Scheme",
+            }
+        scheme_data["saved_at"] = saved_at
+        enriched_items.append(scheme_data)
+
+    enriched_items.sort(key=lambda row: row.get("saved_at") or "", reverse=True)
+    return enriched_items
+
+
+def save_scheme_for_user(user_id, scheme_name):
+    scheme_name = (scheme_name or "").strip()
+    if not scheme_name:
+        return {"ok": False, "error": "Scheme name is required."}
+
+    scheme_lookup = build_scheme_lookup()
+    normalized_name = normalize_text(scheme_name)
+    scheme_data = scheme_lookup.get(normalized_name)
+    if not scheme_data:
+        return {"ok": False, "error": "Scheme not found."}
+
+    canonical_name = scheme_data.get("name", scheme_name)
+    store = load_user_store()
+    user = find_user_by_id(store, user_id)
+    if not user:
+        return {"ok": False, "error": "User not found."}
+
+    saved_items = ensure_saved_schemes_list(user)
+    for item in saved_items:
+        if normalize_text(item.get("scheme_name", "")) == normalized_name:
+            return {
+                "ok": True,
+                "saved": True,
+                "already_saved": True,
+                "total_saved": len(saved_items),
+                "scheme_name": canonical_name,
+            }
+
+    saved_items.append(
+        {
+            "scheme_name": canonical_name,
+            "saved_at": now_utc_iso(),
+        }
+    )
+    user["saved_schemes"] = saved_items
+    save_user_store(store)
+    return {
+        "ok": True,
+        "saved": True,
+        "already_saved": False,
+        "total_saved": len(saved_items),
+        "scheme_name": canonical_name,
+    }
+
+
+def remove_saved_scheme_for_user(user_id, scheme_name):
+    scheme_name = (scheme_name or "").strip()
+    if not scheme_name:
+        return {"ok": False, "error": "Scheme name is required."}
+
+    normalized_name = normalize_text(scheme_name)
+    store = load_user_store()
+    user = find_user_by_id(store, user_id)
+    if not user:
+        return {"ok": False, "error": "User not found."}
+
+    saved_items = ensure_saved_schemes_list(user)
+    remaining_items = []
+    removed = False
+    for item in saved_items:
+        if normalize_text(item.get("scheme_name", "")) == normalized_name:
+            removed = True
+            continue
+        remaining_items.append(item)
+
+    user["saved_schemes"] = remaining_items
+    if removed:
+        save_user_store(store)
+
+    return {
+        "ok": True,
+        "removed": removed,
+        "total_saved": len(remaining_items),
+        "scheme_name": scheme_name,
+    }
+
+
 def append_login_history(user):
     login_event = {
         "timestamp": now_utc_iso(),
@@ -252,6 +474,7 @@ def sanitize_user(user):
         "last_login_at": user.get("last_login_at"),
         "login_history": user.get("login_history", []),
         "activities": user.get("activities", []),
+        "saved_schemes": user.get("saved_schemes", []),
     }
 
 
@@ -287,6 +510,22 @@ def render_auth_page(active_tab="signin", error_message=None, status_code=200):
             error_message=error_message,
         ),
         status_code,
+    )
+
+
+@app.route("/saved-schemes", methods=["GET"])
+@require_login
+def saved_schemes_page():
+    current_user = get_current_user()
+    if not current_user:
+        return redirect(url_for("home"))
+
+    saved_schemes = get_saved_schemes_for_user(current_user["id"])
+    return render_template(
+        "saved_schemes.html",
+        current_user=current_user,
+        saved_schemes=saved_schemes,
+        **get_notification_context(),
     )
 
 
@@ -683,41 +922,232 @@ def load_schemes():
         logger.exception("Invalid JSON in schemes file: %s", SCHEMES_FILE)
         return []
 
+def age_overlap_ratio(user_range, scheme_min_age, scheme_max_age):
+    user_min, user_max = user_range
+    overlap_min = max(user_min, scheme_min_age)
+    overlap_max = min(user_max, scheme_max_age)
+    if overlap_min > overlap_max:
+        return 0.0
+    overlap_span = overlap_max - overlap_min + 1
+    user_span = max(1, user_max - user_min + 1)
+    return min(1.0, overlap_span / user_span)
 
-def get_matching_schemes(form_data):
+
+def build_match_component(label, score, weight, status, detail):
+    return {
+        "label": label,
+        "score": int(round(score)),
+        "weight": int(weight),
+        "status": status,
+        "detail": detail,
+    }
+
+
+def score_scheme_against_form(scheme, form_data):
     selected_age = form_data.get("age", "").strip()
     selected_income = form_data.get("income", "").strip()
     selected_occupation = normalize_occupation(form_data.get("occupation", ""))
+    selected_location = normalize_text(form_data.get("location", ""))
+    selected_gender = normalize_text(form_data.get("gender", ""))
+    selected_social_category = normalize_text(form_data.get("category", ""))
+
+    try:
+        scheme_min_age = int(scheme.get("min_age"))
+        scheme_max_age = int(scheme.get("max_age"))
+        scheme_max_income = int(scheme.get("max_income"))
+    except (TypeError, ValueError):
+        return {
+            "eligibility_score": 0,
+            "eligibility_label": "Low",
+            "eligibility_components": [
+                build_match_component(
+                    "Eligibility Data",
+                    0,
+                    100,
+                    "unavailable",
+                    "Scheme has incomplete eligibility criteria.",
+                )
+            ],
+        }
+
+    scheme_occupation = normalize_occupation(scheme.get("occupation"))
+    scheme_text = normalize_text(
+        f"{scheme.get('name', '')} {scheme.get('benefit', '')} {scheme.get('category', '')}"
+    )
+
+    components = []
+    total_weight = 0.0
+    achieved_score = 0.0
 
     age_range = AGE_GROUP_TO_RANGE.get(selected_age)
+    if age_range:
+        age_weight = 35
+        overlap = age_overlap_ratio(age_range, scheme_min_age, scheme_max_age)
+        age_score = age_weight * overlap
+        age_status = "matched" if overlap >= 0.99 else ("partial" if overlap > 0 else "not_matched")
+        components.append(
+            build_match_component(
+                "Age",
+                age_score,
+                age_weight,
+                age_status,
+                f"Selected range {age_range[0]}-{age_range[1]}, scheme allows {scheme_min_age}-{scheme_max_age}.",
+            )
+        )
+        total_weight += age_weight
+        achieved_score += age_score
+
     income_cap = INCOME_RANGE_TO_MAX.get(selected_income)
+    if income_cap is not None:
+        income_weight = 35
+        if int(income_cap) <= scheme_max_income:
+            income_score = income_weight
+            income_status = "matched"
+        else:
+            affordability_ratio = max(0.0, min(1.0, scheme_max_income / max(1, int(income_cap))))
+            income_score = income_weight * (affordability_ratio * 0.55)
+            income_status = "partial" if affordability_ratio >= 0.75 else "not_matched"
+        components.append(
+            build_match_component(
+                "Income",
+                income_score,
+                income_weight,
+                income_status,
+                f"Selected income cap {format_rupees(income_cap)}, scheme cap {format_rupees(scheme_max_income)}.",
+            )
+        )
+        total_weight += income_weight
+        achieved_score += income_score
 
-    matches = []
+    if selected_occupation:
+        occupation_weight = 30
+        if selected_occupation == scheme_occupation:
+            occupation_score = occupation_weight
+            occupation_status = "matched"
+        elif not scheme_occupation:
+            occupation_score = occupation_weight * 0.5
+            occupation_status = "partial"
+        else:
+            occupation_score = 0
+            occupation_status = "not_matched"
+        components.append(
+            build_match_component(
+                "Occupation",
+                occupation_score,
+                occupation_weight,
+                occupation_status,
+                f"Selected {selected_occupation.replace('_', ' ')}, scheme targets {scheme_occupation.replace('_', ' ') if scheme_occupation else 'all occupations'}.",
+            )
+        )
+        total_weight += occupation_weight
+        achieved_score += occupation_score
+
+    if selected_location:
+        location_weight = 8
+        location_keywords = {
+            "urban": ("urban", "city", "vendor"),
+            "semi_urban": ("urban", "semi-urban", "town"),
+            "rural": ("rural", "gramin", "farmer", "village"),
+        }
+        keywords = location_keywords.get(selected_location, ())
+        location_hit = any(keyword in scheme_text for keyword in keywords)
+        location_score = location_weight if location_hit else location_weight * 0.35
+        components.append(
+            build_match_component(
+                "Location",
+                location_score,
+                location_weight,
+                "matched" if location_hit else "partial",
+                f"Selected {selected_location.replace('_', ' ')}, checked scheme context for location relevance.",
+            )
+        )
+        total_weight += location_weight
+        achieved_score += location_score
+
+    if selected_gender and selected_gender != "male":
+        gender_weight = 8
+        gender_keywords = {
+            "female": ("women", "girl", "maternity", "pregnant", "kanya"),
+            "transgender": ("transgender", "inclusive", "social justice"),
+        }
+        keywords = gender_keywords.get(selected_gender, ())
+        gender_hit = any(keyword in scheme_text for keyword in keywords)
+        gender_score = gender_weight if gender_hit else gender_weight * 0.25
+        components.append(
+            build_match_component(
+                "Gender Focus",
+                gender_score,
+                gender_weight,
+                "matched" if gender_hit else "partial",
+                f"Selected {selected_gender}, checked scheme relevance to gender-focused benefits.",
+            )
+        )
+        total_weight += gender_weight
+        achieved_score += gender_score
+
+    if selected_social_category and selected_social_category != "general":
+        category_weight = 8
+        category_keywords = {
+            "obc": ("obc",),
+            "sc": ("sc ", "scheduled caste"),
+            "st": ("st ", "scheduled tribe"),
+            "minority": ("minority",),
+        }
+        keywords = category_keywords.get(selected_social_category, ())
+        category_hit = any(keyword in scheme_text for keyword in keywords)
+        category_score = category_weight if category_hit else category_weight * 0.25
+        components.append(
+            build_match_component(
+                "Category Focus",
+                category_score,
+                category_weight,
+                "matched" if category_hit else "partial",
+                f"Selected {selected_social_category.upper()}, checked mention in scheme details.",
+            )
+        )
+        total_weight += category_weight
+        achieved_score += category_score
+
+    if total_weight <= 0:
+        return {
+            "eligibility_score": 0,
+            "eligibility_label": "Low",
+            "eligibility_components": [],
+        }
+
+    final_score = int(round((achieved_score / total_weight) * 100))
+    if final_score >= 80:
+        label = "High"
+    elif final_score >= 60:
+        label = "Moderate"
+    else:
+        label = "Low"
+
+    return {
+        "eligibility_score": max(0, min(100, final_score)),
+        "eligibility_label": label,
+        "eligibility_components": components,
+    }
+
+
+def get_matching_schemes(form_data):
+    scored_schemes = []
     for scheme in load_schemes():
-        try:
-            scheme_min_age = int(scheme.get("min_age"))
-            scheme_max_age = int(scheme.get("max_age"))
-            scheme_max_income = int(scheme.get("max_income"))
-        except (TypeError, ValueError):
-            logger.warning("Skipping invalid scheme record: %s", scheme)
-            continue
+        score_data = score_scheme_against_form(scheme, form_data)
+        scored_scheme = {**scheme, **score_data}
+        scored_schemes.append(scored_scheme)
 
-        scheme_occupation = normalize_occupation(scheme.get("occupation"))
+    scored_schemes.sort(
+        key=lambda row: (row.get("eligibility_score", 0), row.get("max_income", 0), row.get("name", "")),
+        reverse=True,
+    )
 
-        if age_range:
-            user_min_age, user_max_age = age_range
-            if user_max_age < scheme_min_age or user_min_age > scheme_max_age:
-                continue
+    strong_matches = [scheme for scheme in scored_schemes if scheme.get("eligibility_score", 0) >= 55]
+    if strong_matches:
+        return strong_matches[:12]
 
-        if income_cap is not None and int(income_cap) > scheme_max_income:
-            continue
-
-        if selected_occupation and scheme_occupation and selected_occupation != scheme_occupation:
-            continue
-
-        matches.append(scheme)
-
-    return matches
+    fallback_matches = [scheme for scheme in scored_schemes if scheme.get("eligibility_score", 0) >= 35]
+    return fallback_matches[:8]
 
 
 # ─────────────────────────────────────────────
@@ -733,6 +1163,7 @@ def home():
         "index.html",
         ai_agent_api_key_required=bool(AI_AGENT_API_KEY),
         current_user=current_user,
+        **get_notification_context(),
     )
 
 
@@ -779,6 +1210,7 @@ def sign_up():
         "last_login_at": None,
         "login_history": [],
         "activities": [],
+        "saved_schemes": [],
     }
 
     append_login_history(new_user)
@@ -845,6 +1277,7 @@ def history():
         current_user=current_user,
         login_history=login_history,
         activities=activities,
+        **get_notification_context(),
     )
 
 
@@ -852,6 +1285,11 @@ def history():
 @require_login
 def show_result():
     current_user = get_current_user()
+    saved_scheme_names = (
+        get_saved_scheme_names_for_user(current_user["id"])
+        if current_user
+        else set()
+    )
     validation_error = validate_form_data(request.form)
     if validation_error:
         logger.info("Form validation failed: %s", validation_error)
@@ -861,7 +1299,14 @@ def show_result():
                 "scheme_search_validation_failed",
                 {"error": validation_error},
             )
-        return render_template("result.html", schemes=[], error_message=validation_error), 400
+        return render_template(
+            "result.html",
+            schemes=[],
+            error_message=validation_error,
+            current_user=current_user,
+            saved_scheme_names=saved_scheme_names,
+            **get_notification_context(),
+        ), 400
 
     matches = get_matching_schemes(request.form)
     if current_user:
@@ -882,7 +1327,14 @@ def show_result():
         request.form.get("occupation", ""),
         len(matches),
     )
-    return render_template("result.html", schemes=matches, error_message=None)
+    return render_template(
+        "result.html",
+        schemes=matches,
+        error_message=None,
+        current_user=current_user,
+        saved_scheme_names=saved_scheme_names,
+        **get_notification_context(),
+    )
 
 
 # ─────────────────────────────────────────────
@@ -919,6 +1371,73 @@ def assistant_chat():
     )
     logger.info("Assistant query served with %d characters", len(message.strip()))
     return jsonify({"reply": reply}), 200
+
+
+@app.route("/api/saved-schemes", methods=["GET"])
+def list_saved_schemes():
+    current_user = get_current_user()
+    if not current_user:
+        return jsonify({"error": "Please sign in to view saved schemes."}), 401
+
+    saved_schemes = get_saved_schemes_for_user(current_user["id"])
+    return jsonify(
+        {
+            "saved_schemes": saved_schemes,
+            "saved_scheme_names": [scheme.get("name", "") for scheme in saved_schemes],
+            "total_saved": len(saved_schemes),
+        }
+    ), 200
+
+
+@app.route("/api/saved-schemes/save", methods=["POST"])
+def save_scheme_endpoint():
+    current_user = get_current_user()
+    if not current_user:
+        return jsonify({"error": "Please sign in to save schemes."}), 401
+
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return jsonify({"error": "Request body must be JSON with 'scheme_name'."}), 400
+
+    scheme_name = payload.get("scheme_name", "")
+    result = save_scheme_for_user(current_user["id"], scheme_name)
+    if not result.get("ok"):
+        status_code = 404 if "not found" in result.get("error", "").lower() else 400
+        return jsonify({"error": result.get("error")}), status_code
+
+    if not result.get("already_saved"):
+        persist_user_activity(
+            current_user["id"],
+            "scheme_saved",
+            {"scheme_name": result.get("scheme_name", "")},
+        )
+
+    return jsonify(result), 200
+
+
+@app.route("/api/saved-schemes/remove", methods=["POST"])
+def remove_saved_scheme_endpoint():
+    current_user = get_current_user()
+    if not current_user:
+        return jsonify({"error": "Please sign in to remove saved schemes."}), 401
+
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return jsonify({"error": "Request body must be JSON with 'scheme_name'."}), 400
+
+    scheme_name = payload.get("scheme_name", "")
+    result = remove_saved_scheme_for_user(current_user["id"], scheme_name)
+    if not result.get("ok"):
+        return jsonify({"error": result.get("error")}), 400
+
+    if result.get("removed"):
+        persist_user_activity(
+            current_user["id"],
+            "scheme_unsaved",
+            {"scheme_name": result.get("scheme_name", "")},
+        )
+
+    return jsonify(result), 200
 
 
 @app.route("/api/items", methods=["GET"])
