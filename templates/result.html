@@ -20,12 +20,15 @@
       padding: 20px 22px;
       margin-bottom: 14px;
     }
+<<<<<<< HEAD
     .card-head {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 14px;
     }
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
     .result-title {
       font-family: 'Noto Serif', serif;
       color: var(--navy);
@@ -33,6 +36,7 @@
       margin-bottom: 6px;
       line-height: 1.3;
     }
+<<<<<<< HEAD
     .score-wrap {
       min-width: 108px;
       display: flex;
@@ -97,6 +101,8 @@
       border-color: rgba(185,28,28,0.32);
       background: rgba(185,28,28,0.1);
     }
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
     .result-benefit {
       color: var(--text-dark);
       line-height: 1.55;
@@ -117,6 +123,7 @@
       padding: 5px 10px;
       font-weight: 500;
     }
+<<<<<<< HEAD
     .status-box {
       background: var(--white);
       border-radius: 14px;
@@ -138,6 +145,8 @@
     .error-box {
       border-left: 4px solid #B91C1C;
     }
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
     .result-actions {
       margin-top: 14px;
       display: flex;
@@ -145,6 +154,7 @@
       gap: 10px;
       align-items: center;
     }
+<<<<<<< HEAD
     .save-btn {
       display: inline-flex;
       align-items: center;
@@ -172,6 +182,8 @@
       opacity: 0.72;
       cursor: wait;
     }
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
     .apply-btn {
       display: inline-flex;
       align-items: center;
@@ -194,6 +206,7 @@
       font-size: 12.5px;
       color: var(--text-muted);
     }
+<<<<<<< HEAD
     .save-feedback {
       margin: 0 auto 14px;
       max-width: 960px;
@@ -239,6 +252,29 @@
     .score-chip.partial .dot { background: #E87722; }
     .score-chip.not_matched .dot { background: #B91C1C; }
     .score-chip.unavailable .dot { background: #64748B; }
+=======
+    .status-box {
+      background: var(--white);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .status-box h3 {
+      font-family: 'Noto Serif', serif;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .status-box p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .error-box {
+      border-left: 4px solid #B91C1C;
+    }
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
     .back-row {
       margin-top: 20px;
       display: flex;
@@ -261,6 +297,7 @@
       border-color: var(--navy-light);
       background: rgba(32,82,149,0.06);
     }
+<<<<<<< HEAD
     @media (max-width: 720px) {
       .card-head {
         flex-direction: column;
@@ -269,11 +306,14 @@
         align-items: flex-start;
       }
     }
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
   </style>
 </head>
 <body>
   <div class="gov-ribbon">
     <span>भारत सरकार &nbsp;|&nbsp; Government of India &nbsp;|&nbsp; Ministry of Social Justice &amp; Empowerment</span>
+<<<<<<< HEAD
     <span class="top-ribbon-actions">
       <a href="/" class="top-nav-link">Home</a>
       <a href="/history" class="top-nav-link">History</a>
@@ -313,6 +353,12 @@
       </div>
       <span class="top-user-name">{{ current_user.name }}</span>
       <a href="/logout" class="top-logout-btn">Logout</a>
+=======
+    <span>
+      <a href="#">Skip to content</a>
+      <a href="#">Hindi</a>
+      <a href="#">Help</a>
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
     </span>
   </div>
 
@@ -362,7 +408,10 @@
         <p>Review the result below and refine your details for better matches.</p>
       {% endif %}
     </div>
+<<<<<<< HEAD
     <div class="save-feedback" id="saveFeedback" hidden></div>
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 
     {% if error_message %}
       <div class="status-box error-box">
@@ -372,6 +421,7 @@
     {% elif schemes %}
       {% for s in schemes %}
         <article class="result-card">
+<<<<<<< HEAD
           <div class="card-head">
             <div>
               <h3 class="result-title">{{ s.name }}</h3>
@@ -384,6 +434,9 @@
               <span class="ring-caption">Eligibility Score</span>
             </div>
           </div>
+=======
+          <h3 class="result-title">{{ s.name }}</h3>
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
           <p class="result-benefit">{{ s.benefit }}</p>
           <div class="meta-row">
             <span class="meta-chip">Age: {{ s.min_age }} - {{ s.max_age }}</span>
@@ -391,6 +444,7 @@
             <span class="meta-chip">Occupation: {{ s.occupation|replace("_", " ")|title }}</span>
             <span class="meta-chip">Category: {{ s.category or "General" }}</span>
           </div>
+<<<<<<< HEAD
           {% if s.eligibility_components %}
             <div class="score-breakdown">
               {% for component in s.eligibility_components %}
@@ -401,10 +455,13 @@
               {% endfor %}
             </div>
           {% endif %}
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
           <div class="result-actions">
             {% if s.apply_url %}
               <a class="apply-btn" href="{{ s.apply_url }}" target="_blank" rel="noopener noreferrer">Apply on Official Portal ↗</a>
             {% endif %}
+<<<<<<< HEAD
             {% set scheme_key = (s.name or '')|lower %}
             {% set is_saved = saved_scheme_names is defined and scheme_key in saved_scheme_names %}
             <button
@@ -417,6 +474,8 @@
             >
               {% if is_saved %}Saved{% else %}Save Scheme{% endif %}
             </button>
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
             <span class="source-note">Source: {{ s.source or "Government Portal" }}</span>
           </div>
         </article>
@@ -440,6 +499,7 @@
     <a href="#">Privacy Policy</a> &nbsp;·&nbsp;
     <a href="#">Disclaimer</a>
   </footer>
+<<<<<<< HEAD
   <script>
     function initNotificationDropdowns() {
       const wrappers = document.querySelectorAll('[data-notification-root]');
@@ -540,5 +600,7 @@
       button.addEventListener('click', handleSaveButtonClick);
     });
   </script>
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 </body>
 </html>

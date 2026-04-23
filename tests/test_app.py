@@ -1,8 +1,13 @@
 import importlib.util
+<<<<<<< HEAD
 import json
 import pathlib
 import sys
 import tempfile
+=======
+import pathlib
+import sys
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 import unittest
 
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -22,6 +27,7 @@ class AppRoutesTestCase(unittest.TestCase):
         self.client = app.test_client()
         self.original_agent_key = app_module.AI_AGENT_API_KEY
         self.original_gemini_key = app_module.GEMINI_API_KEY
+<<<<<<< HEAD
         self.original_users_file = app_module.USERS_FILE
 
         self.temp_dir = tempfile.TemporaryDirectory()
@@ -30,11 +36,14 @@ class AppRoutesTestCase(unittest.TestCase):
             json.dump({"users": []}, file_handle)
 
         app_module.AI_AGENT_API_KEY = ""
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
         app_module.GEMINI_API_KEY = ""
 
     def tearDown(self):
         app_module.AI_AGENT_API_KEY = self.original_agent_key
         app_module.GEMINI_API_KEY = self.original_gemini_key
+<<<<<<< HEAD
         app_module.USERS_FILE = self.original_users_file
         self.temp_dir.cleanup()
 
@@ -103,6 +112,15 @@ class AppRoutesTestCase(unittest.TestCase):
 
     def test_result_page_with_matching_scheme_logs_activity(self):
         self._signup()
+=======
+
+    def test_home_page_loads(self):
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"AI-Powered Government", response.data)
+
+    def test_result_page_with_matching_scheme(self):
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
         response = self.client.post(
             "/result",
             data={
@@ -112,6 +130,7 @@ class AppRoutesTestCase(unittest.TestCase):
             },
         )
         self.assertEqual(response.status_code, 200)
+<<<<<<< HEAD
         self.assertIn(b"Recommended schemes for your profile", response.data)
         self.assertIn(b"Rajarshi Chhatrapati Shahu Maharaj Scholarship", response.data)
         self.assertIn(b"Apply on Official Portal", response.data)
@@ -122,6 +141,12 @@ class AppRoutesTestCase(unittest.TestCase):
 
     def test_result_page_validation_error(self):
         self._signup()
+=======
+        self.assertIn(b"Rajarshi Chhatrapati Shahu Maharaj Scholarship", response.data)
+        self.assertIn(b"Apply on Official Portal", response.data)
+
+    def test_result_page_validation_error(self):
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
         response = self.client.post(
             "/result",
             data={
@@ -133,6 +158,7 @@ class AppRoutesTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn(b"Input validation failed", response.data)
 
+<<<<<<< HEAD
     # ─── Assistant Tests ──────────────────────────
 
     def test_assistant_requires_login(self):
@@ -142,13 +168,26 @@ class AppRoutesTestCase(unittest.TestCase):
 
     def test_assistant_endpoint_returns_reply(self):
         self._signup()
+=======
+    def test_api_health(self):
+        response = self.client.get("/api/health")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.is_json)
+        payload = response.get_json()
+        self.assertEqual(payload["status"], "ok")
+
+    def test_assistant_endpoint_returns_reply(self):
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
         response = self.client.post("/api/assistant", json={"message": "I am a student with low income"})
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.is_json)
         self.assertIn("reply", response.get_json())
 
     def test_assistant_complex_query_includes_apply_links(self):
+<<<<<<< HEAD
         self._signup()
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
         response = self.client.post(
             "/api/assistant",
             json={"message": "I am 22 years old student, income below 2 lakh. How to apply?"},
@@ -160,13 +199,20 @@ class AppRoutesTestCase(unittest.TestCase):
         self.assertIn("Apply:", reply)
 
     def test_assistant_endpoint_message_validation(self):
+<<<<<<< HEAD
         self._signup()
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
         response = self.client.post("/api/assistant", json={"message": ""})
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.get_json().get("error"), "Please provide a non-empty 'message' field.")
 
+<<<<<<< HEAD
     def test_assistant_endpoint_api_key_enforcement_when_logged_in(self):
         self._signup()
+=======
+    def test_assistant_endpoint_api_key_enforcement(self):
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
         app_module.AI_AGENT_API_KEY = "test-secret"
 
         unauthorized = self.client.post("/api/assistant", json={"message": "hello"})
@@ -179,6 +225,7 @@ class AppRoutesTestCase(unittest.TestCase):
         )
         self.assertEqual(authorized.status_code, 200)
 
+<<<<<<< HEAD
     def test_assistant_logs_activity(self):
         self._signup()
         response = self.client.post("/api/assistant", json={"message": "I am a student"})
@@ -206,6 +253,8 @@ class AppRoutesTestCase(unittest.TestCase):
         self.assertTrue(response.is_json)
         self.assertEqual(response.get_json()["status"], "ok")
 
+=======
+>>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
     def test_404_web_vs_api_response_format(self):
         web_response = self.client.get("/does-not-exist")
         self.assertEqual(web_response.status_code, 404)
