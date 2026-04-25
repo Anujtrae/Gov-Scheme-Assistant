@@ -142,7 +142,7 @@
       "email": "anujtarwade9@gmail.com",
       "password_hash": "scrypt:32768:8:1$RWgOWgf1ENQfeS8h$7cb7c3c5c2278f843c4f6facb5bdcd813d4f9a34f92a05e31fd9ff3e627d54289463670571e0a1735834f89f86de92bb68523028d0c42be63756c8fde641182e",
       "created_at": "2026-04-23T14:16:28.551367+00:00",
-      "last_login_at": "2026-04-23T18:26:34.358919+00:00",
+      "last_login_at": "2026-04-25T14:35:51.146254+00:00",
       "login_history": [
         {
           "timestamp": "2026-04-23T14:16:28.551402+00:00",
@@ -172,6 +172,51 @@
         {
           "timestamp": "2026-04-23T18:26:34.358919+00:00",
           "ip_address": "192.168.1.34",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0"
+        },
+        {
+          "timestamp": "2026-04-24T08:12:18.402405+00:00",
+          "ip_address": "172.28.182.237",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0"
+        },
+        {
+          "timestamp": "2026-04-24T08:12:19.792068+00:00",
+          "ip_address": "172.28.182.237",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0"
+        },
+        {
+          "timestamp": "2026-04-24T08:17:16.125340+00:00",
+          "ip_address": "172.28.182.237",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0"
+        },
+        {
+          "timestamp": "2026-04-24T08:20:02.209514+00:00",
+          "ip_address": "127.0.0.1",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0"
+        },
+        {
+          "timestamp": "2026-04-24T08:20:19.473492+00:00",
+          "ip_address": "127.0.0.1",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0"
+        },
+        {
+          "timestamp": "2026-04-24T09:33:58.253770+00:00",
+          "ip_address": "172.28.182.237",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0"
+        },
+        {
+          "timestamp": "2026-04-24T09:38:22.795540+00:00",
+          "ip_address": "172.28.182.237",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0"
+        },
+        {
+          "timestamp": "2026-04-24T09:39:24.583311+00:00",
+          "ip_address": "172.28.182.237",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0"
+        },
+        {
+          "timestamp": "2026-04-25T14:35:51.146254+00:00",
+          "ip_address": "192.168.1.36",
           "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0"
         }
       ],
@@ -325,6 +370,199 @@
             "occupation": "student",
             "matched_schemes": 12
           }
+        },
+        {
+          "timestamp": "2026-04-24T08:12:18.405759+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:12:19.893404+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:12:38.469828+00:00",
+          "action": "scheme_search",
+          "details": {
+            "age": "18_25",
+            "income": "1_to_2_5_lakhs",
+            "occupation": "student",
+            "matched_schemes": 12
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:15:14.803635+00:00",
+          "action": "scheme_search",
+          "details": {
+            "age": "18_25",
+            "income": "1_to_2_5_lakhs",
+            "occupation": "daily_wage_worker",
+            "matched_schemes": 12
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:15:19.268591+00:00",
+          "action": "scheme_saved",
+          "details": {
+            "scheme_name": "National Agriculture Market (e-NAM)"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:16:14.350058+00:00",
+          "action": "sign_out",
+          "details": {}
+        },
+        {
+          "timestamp": "2026-04-24T08:17:16.125651+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:18:04.492324+00:00",
+          "action": "scheme_search",
+          "details": {
+            "age": "18_25",
+            "income": "2_5_to_5_lakhs",
+            "occupation": "student",
+            "matched_schemes": 12
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:20:02.209748+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:20:13.958508+00:00",
+          "action": "sign_out",
+          "details": {}
+        },
+        {
+          "timestamp": "2026-04-24T08:20:19.473577+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:20:35.588591+00:00",
+          "action": "scheme_unsaved",
+          "details": {
+            "scheme_name": "National Agriculture Market (e-NAM)"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:21:37.165350+00:00",
+          "action": "assistant_query",
+          "details": {
+            "message": "i am a student with low income"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:22:38.387661+00:00",
+          "action": "scheme_search",
+          "details": {
+            "age": "18_25",
+            "income": "below_1_lakh",
+            "occupation": "farmer_agri_worker",
+            "matched_schemes": 12
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:24:54.854536+00:00",
+          "action": "sign_out",
+          "details": {}
+        },
+        {
+          "timestamp": "2026-04-24T09:33:58.255642+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T09:34:42.227320+00:00",
+          "action": "scheme_search",
+          "details": {
+            "age": "18_25",
+            "income": "1_to_2_5_lakhs",
+            "occupation": "student",
+            "matched_schemes": 12
+          }
+        },
+        {
+          "timestamp": "2026-04-24T09:35:18.373170+00:00",
+          "action": "scheme_unsaved",
+          "details": {
+            "scheme_name": "Tuition Fees and Examination Fees for OBC Students"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T09:35:45.342043+00:00",
+          "action": "scheme_saved",
+          "details": {
+            "scheme_name": "Tuition Fees and Examination Fees for OBC Students"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T09:38:13.015333+00:00",
+          "action": "sign_out",
+          "details": {}
+        },
+        {
+          "timestamp": "2026-04-24T09:38:22.795652+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T09:39:01.406617+00:00",
+          "action": "scheme_search",
+          "details": {
+            "age": "18_25",
+            "income": "1_to_2_5_lakhs",
+            "occupation": "student",
+            "matched_schemes": 12
+          }
+        },
+        {
+          "timestamp": "2026-04-24T09:39:17.783778+00:00",
+          "action": "sign_out",
+          "details": {}
+        },
+        {
+          "timestamp": "2026-04-24T09:39:24.583396+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-25T14:35:51.146343+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-25T14:36:05.147561+00:00",
+          "action": "scheme_search",
+          "details": {
+            "age": "18_25",
+            "income": "1_to_2_5_lakhs",
+            "occupation": "farmer_agri_worker",
+            "matched_schemes": 12
+          }
         }
       ],
       "saved_schemes": [
@@ -333,14 +571,56 @@
           "saved_at": "2026-04-23T15:19:39.060940+00:00"
         },
         {
-          "scheme_name": "Tuition Fees and Examination Fees for OBC Students",
-          "saved_at": "2026-04-23T15:19:46.447686+00:00"
-        },
-        {
           "scheme_name": "Minority Post-Matric Scholarship",
           "saved_at": "2026-04-23T15:19:48.389608+00:00"
+        },
+        {
+          "scheme_name": "Tuition Fees and Examination Fees for OBC Students",
+          "saved_at": "2026-04-24T09:35:45.318588+00:00"
         }
       ]
+    },
+    {
+      "id": "c6b40326-6524-497d-abe0-b840d7113a96",
+      "name": "Test User",
+      "email": "test@example.com",
+      "password_hash": "scrypt:32768:8:1$XHb7kUwqV96FTvRJ$c961ee5a0dec29a95c3f8e7e6c077c79e6a27c6841c865f2ad852db0ea53c4d12b915c4b45dbc27d809316b5e3b17b021a642087e2b8ce2e2f60c2d65906a56d",
+      "created_at": "2026-04-24T08:09:26.495946+00:00",
+      "last_login_at": "2026-04-24T08:09:26.497116+00:00",
+      "login_history": [
+        {
+          "timestamp": "2026-04-24T08:09:26.497116+00:00",
+          "ip_address": "127.0.0.1",
+          "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+        }
+      ],
+      "activities": [
+        {
+          "timestamp": "2026-04-24T08:09:26.497338+00:00",
+          "action": "sign_up",
+          "details": {
+            "email": "test@example.com"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:09:26.497630+00:00",
+          "action": "sign_in",
+          "details": {
+            "method": "password"
+          }
+        },
+        {
+          "timestamp": "2026-04-24T08:10:27.674948+00:00",
+          "action": "scheme_search",
+          "details": {
+            "age": "below_18",
+            "income": "below_1_lakh",
+            "occupation": "student",
+            "matched_schemes": 12
+          }
+        }
+      ],
+      "saved_schemes": []
     }
   ]
 }

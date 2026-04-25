@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from flask import Flask, jsonify, request, render_template, redirect, session, url_for
 import re
 
@@ -13,15 +12,6 @@ from uuid import uuid4
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-=======
-from flask import Flask, jsonify, request, render_template
-import json
-import logging
-import os
-import re
-import urllib.error
-import urllib.request
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 from env_loader import get_env, load_env_file
 
 # ─────────────────────────────────────────────
@@ -49,10 +39,7 @@ AI_AGENT_API_KEY = get_env("AI_AGENT_API_KEY", "")
 GEMINI_API_KEY = get_env("GEMINI_API_KEY", "")
 
 SCHEMES_FILE = os.path.join(BASE_DIR, "schemes.json")
-<<<<<<< HEAD
 USERS_FILE = os.path.join(BASE_DIR, "users.json")
-=======
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 
 AGE_GROUP_TO_RANGE = {
     "below_18": (0, 17),
@@ -70,28 +57,6 @@ AGE_GROUP_TO_RANGE = {
     "Above 60": (61, 200),
 }
 
-<<<<<<< HEAD
-=======
-ASSISTANT_CATEGORY_HINTS = {
-    "Education": ["scholarship", "student", "college", "school", "tuition", "fees", "exam"],
-    "Agriculture": ["farmer", "crop", "kisan", "agriculture", "farming", "soil"],
-    "Health": ["health", "hospital", "medical", "treatment", "insurance"],
-    "Housing": ["housing", "house", "home", "awas"],
-    "Employment": ["job", "employment", "business", "loan", "enterprise", "vendor"],
-    "Skill Development": ["skill", "training", "certificate", "apprenticeship"],
-    "Women & Child": ["girl", "women", "woman", "pregnant", "maternity", "child"],
-    "Senior Citizen": ["senior", "old age", "elderly", "pension", "retired"],
-    "Social Security": ["pension", "social security", "retirement"],
-}
-
-ASSISTANT_INCOME_PHRASES = {
-    "low income": 250000,
-    "bpl": 250000,
-    "middle income": 800000,
-    "high income": 1000000000000,
-}
-
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 INCOME_RANGE_TO_MAX = {
     "below_1_lakh": 100000,
     "1_to_2_5_lakhs": 250000,
@@ -125,17 +90,13 @@ OCCUPATION_NORMALIZATION = {
     "farmer": "farmer",
 }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 REQUIRED_FIELDS = {
     "age": "Age Group",
     "income": "Annual Income",
     "occupation": "Occupation",
 }
 
-<<<<<<< HEAD
 ASSISTANT_CATEGORY_HINTS = {
     "Education": ["scholarship", "student", "college", "school", "tuition", "fees", "exam"],
     "Agriculture": ["farmer", "crop", "kisan", "agriculture", "farming", "soil"],
@@ -156,8 +117,6 @@ ASSISTANT_INCOME_PHRASES = {
 }
 
 
-=======
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 ASSISTANT_OCCUPATION_HINTS = {
     "student": "student",
     "college": "student",
@@ -184,7 +143,6 @@ ASSISTANT_OCCUPATION_HINTS = {
     "retired": "senior_citizen",
     "senior citizen": "senior_citizen",
 }
-<<<<<<< HEAD
 SAMPLE_NOTIFICATIONS = [
     {
         "id": "notif-1",
@@ -224,15 +182,12 @@ SAMPLE_NOTIFICATIONS = [
     },
 ]
 
-=======
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 
 
 def normalize_text(value):
     return (value or "").strip().lower()
 
 
-<<<<<<< HEAD
 def now_utc_iso():
     return datetime.now(timezone.utc).isoformat()
 
@@ -572,11 +527,6 @@ def saved_schemes_page():
         saved_schemes=saved_schemes,
         **get_notification_context(),
     )
-=======
-def normalize_occupation(value):
-    normalized = normalize_text(value)
-    return OCCUPATION_NORMALIZATION.get(normalized, normalized)
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 
 
 def has_valid_agent_api_key():
@@ -591,10 +541,7 @@ def has_valid_agent_api_key():
 
     return provided_key == AI_AGENT_API_KEY
 
-<<<<<<< HEAD
 
-=======
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 def get_gemini_reply(message):
     if not GEMINI_API_KEY:
         return None
@@ -673,10 +620,7 @@ def validate_form_data(form_data):
     return None
 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 def amount_from_unit(raw_value, raw_unit):
     cleaned_value = str(raw_value).replace(",", "").strip()
     if not cleaned_value:
@@ -962,18 +906,11 @@ def build_assistant_reply(message):
     )
 
 
-<<<<<<< HEAD
 
 def load_schemes():
     try:
         with open(SCHEMES_FILE, "r", encoding="utf-8") as file_handle:
             data = json.load(file_handle)
-=======
-def load_schemes():
-    try:
-        with open(SCHEMES_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
             if not isinstance(data, list):
                 logger.error("Invalid schemes format: expected a JSON array.")
                 return []
@@ -985,7 +922,6 @@ def load_schemes():
         logger.exception("Invalid JSON in schemes file: %s", SCHEMES_FILE)
         return []
 
-<<<<<<< HEAD
 def age_overlap_ratio(user_range, scheme_min_age, scheme_max_age):
     user_min, user_max = user_range
     overlap_min = max(user_min, scheme_min_age)
@@ -1212,43 +1148,6 @@ def get_matching_schemes(form_data):
 
     fallback_matches = [scheme for scheme in scored_schemes if scheme.get("eligibility_score", 0) >= 35]
     return fallback_matches[:8]
-=======
-
-def get_matching_schemes(form_data):
-    selected_age = form_data.get("age", "").strip()
-    selected_income = form_data.get("income", "").strip()
-    selected_occupation = normalize_occupation(form_data.get("occupation", ""))
-
-    age_range = AGE_GROUP_TO_RANGE.get(selected_age)
-    income_cap = INCOME_RANGE_TO_MAX.get(selected_income)
-
-    matches = []
-    for scheme in load_schemes():
-        try:
-            scheme_min_age = int(scheme.get("min_age"))
-            scheme_max_age = int(scheme.get("max_age"))
-            scheme_max_income = int(scheme.get("max_income"))
-        except (TypeError, ValueError):
-            logger.warning("Skipping invalid scheme record: %s", scheme)
-            continue
-
-        scheme_occupation = normalize_occupation(scheme.get("occupation"))
-
-        if age_range:
-            user_min_age, user_max_age = age_range
-            if user_max_age < scheme_min_age or user_min_age > scheme_max_age:
-                continue
-
-        if income_cap is not None and int(income_cap) > scheme_max_income:
-            continue
-
-        if selected_occupation and scheme_occupation and selected_occupation != scheme_occupation:
-            continue
-
-        matches.append(scheme)
-
-    return matches
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 
 
 # ─────────────────────────────────────────────
@@ -1257,7 +1156,6 @@ def get_matching_schemes(form_data):
 
 @app.route("/", methods=["GET"])
 def home():
-<<<<<<< HEAD
     current_user = get_current_user()
     if not current_user:
         return render_auth_page()
@@ -1422,19 +1320,6 @@ def show_result():
                 "matched_schemes": len(matches),
             },
         )
-=======
-    return render_template("index.html", ai_agent_api_key_required=bool(AI_AGENT_API_KEY))
-
-
-@app.route("/result", methods=["POST"])
-def show_result():
-    validation_error = validate_form_data(request.form)
-    if validation_error:
-        logger.info("Form validation failed: %s", validation_error)
-        return render_template("result.html", schemes=[], error_message=validation_error), 400
-
-    matches = get_matching_schemes(request.form)
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
     logger.info(
         "Scheme search completed: age=%s income=%s occupation=%s matches=%d",
         request.form.get("age", ""),
@@ -1442,7 +1327,6 @@ def show_result():
         request.form.get("occupation", ""),
         len(matches),
     )
-<<<<<<< HEAD
     return render_template(
         "result.html",
         schemes=matches,
@@ -1451,9 +1335,6 @@ def show_result():
         saved_scheme_names=saved_scheme_names,
         **get_notification_context(),
     )
-=======
-    return render_template("result.html", schemes=matches, error_message=None)
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 
 
 # ─────────────────────────────────────────────
@@ -1464,7 +1345,6 @@ def show_result():
 def health_check():
     return jsonify({"status": "ok", "message": "Server is running"}), 200
 
-<<<<<<< HEAD
 
 @app.route("/api/assistant", methods=["POST"])
 def assistant_chat():
@@ -1472,10 +1352,6 @@ def assistant_chat():
     if not current_user:
         return jsonify({"error": "Please sign in to use the assistant."}), 401
 
-=======
-@app.route("/api/assistant", methods=["POST"])
-def assistant_chat():
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
     data = request.get_json(silent=True)
     if not isinstance(data, dict):
         return jsonify({"error": "Request body must be JSON with a 'message' field."}), 400
@@ -1488,19 +1364,15 @@ def assistant_chat():
         return jsonify({"error": "Please provide a non-empty 'message' field."}), 400
 
     reply = build_assistant_reply(message)
-<<<<<<< HEAD
     persist_user_activity(
         current_user["id"],
         "assistant_query",
         {"message": truncate_text(message, max_length=180)},
     )
-=======
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
     logger.info("Assistant query served with %d characters", len(message.strip()))
     return jsonify({"reply": reply}), 200
 
 
-<<<<<<< HEAD
 @app.route("/api/saved-schemes", methods=["GET"])
 def list_saved_schemes():
     current_user = get_current_user()
@@ -1568,8 +1440,6 @@ def remove_saved_scheme_endpoint():
     return jsonify(result), 200
 
 
-=======
->>>>>>> ccb977842caf5f5132d343a9efad487453325a7d
 @app.route("/api/items", methods=["GET"])
 def get_items():
     items = [
